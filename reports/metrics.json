@@ -1,0 +1,902 @@
+{
+  "generated_at": "2026-09-23T17:48:21+00:00",
+  "ingest": {
+    "quarters": [
+      {
+        "quarter": "2024q3",
+        "zip_bytes": 118280418,
+        "download_seconds": 4.143,
+        "extract_seconds": 2.203,
+        "parse_seconds": 2.904,
+        "rows": 4353443,
+        "rows_num": 3521878,
+        "rows_sub": 6699,
+        "rows_tag": 83106,
+        "rows_pre": 741760,
+        "rejects": 0,
+        "rows_per_second": 1499068.9,
+        "extracted_bytes": 608085212,
+        "parquet_bytes": 71972448
+      },
+      {
+        "quarter": "2024q4",
+        "zip_bytes": 122932548,
+        "download_seconds": 2.052,
+        "extract_seconds": 2.399,
+        "parse_seconds": 3.09,
+        "rows": 4533438,
+        "rows_num": 3705078,
+        "rows_sub": 6491,
+        "rows_tag": 84365,
+        "rows_pre": 737504,
+        "rejects": 0,
+        "rows_per_second": 1467344.7,
+        "extracted_bytes": 637179191,
+        "parquet_bytes": 75875185
+      },
+      {
+        "quarter": "2025q1",
+        "zip_bytes": 127765057,
+        "download_seconds": 1.819,
+        "extract_seconds": 2.344,
+        "parse_seconds": 3.076,
+        "rows": 4506215,
+        "rows_num": 3658551,
+        "rows_sub": 6231,
+        "rows_tag": 90655,
+        "rows_pre": 750778,
+        "rejects": 0,
+        "rows_per_second": 1465179.8,
+        "extracted_bytes": 644134920,
+        "parquet_bytes": 78903513
+      },
+      {
+        "quarter": "2025q2",
+        "zip_bytes": 78973768,
+        "download_seconds": 1.392,
+        "extract_seconds": 1.923,
+        "parse_seconds": 2.997,
+        "rows": 4276187,
+        "rows_num": 3409930,
+        "rows_sub": 7009,
+        "rows_tag": 89426,
+        "rows_pre": 769822,
+        "rejects": 0,
+        "rows_per_second": 1426686.3,
+        "extracted_bytes": 612947372,
+        "parquet_bytes": 49368191
+      },
+      {
+        "quarter": "2025q3",
+        "zip_bytes": 127842298,
+        "download_seconds": 2.453,
+        "extract_seconds": 2.389,
+        "parse_seconds": 2.977,
+        "rows": 4536287,
+        "rows_num": 3720075,
+        "rows_sub": 6541,
+        "rows_tag": 83782,
+        "rows_pre": 725889,
+        "rejects": 6,
+        "rows_per_second": 1523697.2,
+        "extracted_bytes": 650597485,
+        "parquet_bytes": 78858260
+      },
+      {
+        "quarter": "2025q4",
+        "zip_bytes": 65830170,
+        "download_seconds": 1.197,
+        "extract_seconds": 2.028,
+        "parse_seconds": 2.897,
+        "rows": 4643534,
+        "rows_num": 3832977,
+        "rows_sub": 6304,
+        "rows_tag": 84907,
+        "rows_pre": 719346,
+        "rejects": 0,
+        "rows_per_second": 1602752.1,
+        "extracted_bytes": 675779579,
+        "parquet_bytes": 39582717
+      },
+      {
+        "quarter": "2026q1",
+        "zip_bytes": 85259424,
+        "download_seconds": 1.397,
+        "extract_seconds": 2.144,
+        "parse_seconds": 3.178,
+        "rows": 4522052,
+        "rows_num": 3690955,
+        "rows_sub": 6169,
+        "rows_tag": 91794,
+        "rows_pre": 733134,
+        "rejects": 0,
+        "rows_per_second": 1422887.9,
+        "extracted_bytes": 671507769,
+        "parquet_bytes": 58713734
+      },
+      {
+        "quarter": "2026q2",
+        "zip_bytes": 60419016,
+        "download_seconds": 1.086,
+        "extract_seconds": 2.054,
+        "parse_seconds": 3.332,
+        "rows": 4494646,
+        "rows_num": 3608711,
+        "rows_sub": 7714,
+        "rows_tag": 92731,
+        "rows_pre": 785490,
+        "rejects": 0,
+        "rows_per_second": 1349004.8,
+        "extracted_bytes": 718139763,
+        "parquet_bytes": 35971578
+      }
+    ],
+    "n_quarters": 8,
+    "first_quarter": "2024q3",
+    "last_quarter": "2026q2",
+    "total_rows": 35865802,
+    "total_rows_num": 29148155,
+    "total_rows_sub": 53158,
+    "total_rows_tag": 700766,
+    "total_rows_pre": 5963723,
+    "total_rejects": 6,
+    "zip_bytes": 787302699,
+    "extracted_bytes": 5218371291,
+    "parquet_bytes": 489245626,
+    "download_seconds": 15.539,
+    "extract_seconds": 17.483999999999998,
+    "parse_seconds": 24.451,
+    "wall_seconds": 57.474,
+    "rows_per_second_parse": 1466843.973661609,
+    "rows_per_second_end_to_end": 624035.2507220657
+  },
+  "warehouse": {
+    "table_counts": {
+      "raw_sub": 53158,
+      "raw_tag": 700766,
+      "raw_pre": 5963723,
+      "dim_filing": 53158,
+      "dim_company": 7917,
+      "dim_period": 1385,
+      "dim_tag": 654596,
+      "fact_financial_facts": 24184064,
+      "restatements": 291142,
+      "filing_currency": 45919,
+      "fact_normalized": 1716574
+    },
+    "build_seconds": 84.33699139999226,
+    "filings_in_scope": 45957,
+    "filings_total": 53158,
+    "companies_in_scope": 6570,
+    "companies_total": 7917,
+    "forms": [
+      [
+        "10-Q",
+        33801
+      ],
+      [
+        "10-K",
+        11138
+      ],
+      [
+        "10-Q/A",
+        493
+      ],
+      [
+        "10-K/A",
+        490
+      ],
+      [
+        "10-KT",
+        29
+      ],
+      [
+        "10-QT",
+        3
+      ],
+      [
+        "10-KT/A",
+        2
+      ],
+      [
+        "10-QT/A",
+        1
+      ]
+    ],
+    "period_min": "2018-12-31",
+    "period_max": "2026-05-31",
+    "normalized_rows": 1716574,
+    "normalized_derived": 88132,
+    "normalized_metrics": 33,
+    "normalized_companies": 6564,
+    "restatement_groups": 94141,
+    "rounding_groups": 16811,
+    "restatement_companies": 4753,
+    "restatement_version_rows": 291142,
+    "ratio_rows": 1184079,
+    "ratio_non_null": 706139,
+    "ratio_companies": 6534,
+    "ratio_company_periods": 91083,
+    "ratio_count": 13,
+    "ratio_status": [
+      [
+        "ok",
+        521014
+      ],
+      [
+        "null",
+        477940
+      ],
+      [
+        "derived",
+        133835
+      ],
+      [
+        "estimated",
+        51290
+      ]
+    ],
+    "ratio_null_reasons": [
+      [
+        "missing",
+        406844
+      ],
+      [
+        "non_positive_equity",
+        35286
+      ],
+      [
+        "prior_period_not_found",
+        25330
+      ],
+      [
+        "zero_denominator",
+        8170
+      ],
+      [
+        "non_positive_prior_revenue",
+        1909
+      ],
+      [
+        "non_positive_denominator",
+        401
+      ]
+    ],
+    "dq_rules": [
+      {
+        "rule_id": "R01",
+        "rule_name": "balance_sheet_identity",
+        "category": "identity",
+        "severity": "error",
+        "unit": "company balance-sheet date with reported total assets or total liabilities-and-equity",
+        "description": "Total assets must equal LiabilitiesAndStockholdersEquity within 0.1% (floor USD 1,000). Skipped when only one side is reported.",
+        "candidates": 53277,
+        "evaluated": 50955,
+        "passed": 50846,
+        "failed": 109,
+        "skipped": 2322,
+        "failure_rate": 0.002139142380531842,
+        "coverage": 0.9564164648910412,
+        "seconds": 0.031832799984840676,
+        "run_at": "2026-09-23 15:47:38.304007"
+      },
+      {
+        "rule_id": "R02",
+        "rule_name": "liabilities_plus_equity",
+        "category": "identity",
+        "severity": "error",
+        "unit": "company balance-sheet date with reported liabilities-and-equity",
+        "description": "Reported total liabilities + total equity (incl. NCI) + temporary equity must equal LiabilitiesAndStockholdersEquity within 0.5%. Skipped when Liabilities is not reported (derived values would be tautological).",
+        "candidates": 51074,
+        "evaluated": 45062,
+        "passed": 42621,
+        "failed": 2441,
+        "skipped": 6012,
+        "failure_rate": 0.05416981048333407,
+        "coverage": 0.8822884442181932,
+        "seconds": 0.03502019998268224,
+        "run_at": "2026-09-23 15:47:38.340861"
+      },
+      {
+        "rule_id": "R03",
+        "rule_name": "sign_conventions",
+        "category": "sign",
+        "severity": "warn",
+        "unit": "consolidated fact for a tag whose natural balance is non-negative (list in config/quality_rules.yaml)",
+        "description": "Assets, liabilities, inventory, receivables, cash, cost of revenue, capex and share counts must not be negative.",
+        "candidates": 1219812,
+        "evaluated": 1219812,
+        "passed": 1219752,
+        "failed": 60,
+        "skipped": 0,
+        "failure_rate": 4.91879076447846e-05,
+        "coverage": 1.0,
+        "seconds": 0.32089049997739494,
+        "run_at": "2026-09-23 15:47:38.663077"
+      },
+      {
+        "rule_id": "R04",
+        "rule_name": "revenue_nonnegative",
+        "category": "sign",
+        "severity": "warn",
+        "unit": "normalized revenue value (company, period, duration)",
+        "description": "Revenue should not be negative. Warn-level because RevenuesNetOfInterestExpense can legitimately be negative for financial firms.",
+        "candidates": 90285,
+        "evaluated": 90285,
+        "passed": 90151,
+        "failed": 134,
+        "skipped": 0,
+        "failure_rate": 0.001484188957191117,
+        "coverage": 1.0,
+        "seconds": 0.06785300001502037,
+        "run_at": "2026-09-23 15:47:38.733586"
+      },
+      {
+        "rule_id": "R05",
+        "rule_name": "current_assets_le_total_assets",
+        "category": "plausibility",
+        "severity": "error",
+        "unit": "company balance-sheet date with reported total assets",
+        "description": "Current assets cannot exceed total assets (0.1% tolerance). Skipped for unclassified balance sheets that report no current assets.",
+        "candidates": 53158,
+        "evaluated": 40458,
+        "passed": 40452,
+        "failed": 6,
+        "skipped": 12700,
+        "failure_rate": 0.00014830194275545008,
+        "coverage": 0.7610895820008278,
+        "seconds": 0.044522800017148256,
+        "run_at": "2026-09-23 15:47:38.780108"
+      },
+      {
+        "rule_id": "R06",
+        "rule_name": "current_liabilities_le_total_liabilities",
+        "category": "plausibility",
+        "severity": "error",
+        "unit": "company balance-sheet date with total liabilities (reported or derived)",
+        "description": "Current liabilities cannot exceed total liabilities (0.1% tolerance). Skipped when no current liabilities are reported.",
+        "candidates": 52075,
+        "evaluated": 40361,
+        "passed": 40335,
+        "failed": 26,
+        "skipped": 11714,
+        "failure_rate": 0.0006441862193701841,
+        "coverage": 0.7750552088334134,
+        "seconds": 0.03465159999905154,
+        "run_at": "2026-09-23 15:47:38.816695"
+      },
+      {
+        "rule_id": "R07",
+        "rule_name": "period_continuity",
+        "category": "continuity",
+        "severity": "error",
+        "unit": "year-to-date flow value (company, metric, period end) for revenue, cost of revenue, operating income, net income, operating cash flow",
+        "description": "A year-to-date value must equal the previous year-to-date value plus the quarter: YTD(n) = YTD(n-1) + Q(n), within 0.5%. Skipped when either component is not reported (e.g. Q4 is almost never filed as a standalone quarter).",
+        "candidates": 223360,
+        "evaluated": 93517,
+        "passed": 90719,
+        "failed": 2798,
+        "skipped": 129843,
+        "failure_rate": 0.029919693745522204,
+        "coverage": 0.4186828438395416,
+        "seconds": 0.3504706000094302,
+        "run_at": "2026-09-23 15:47:39.169330"
+      },
+      {
+        "rule_id": "R08",
+        "rule_name": "quarters_sum_to_annual",
+        "category": "continuity",
+        "severity": "error",
+        "unit": "(company, metric, fiscal year) with a reported annual value",
+        "description": "Where all four standalone quarters are reported, they must sum to the annual value within 0.5%. Coverage is low because Q4 is rarely filed as a standalone quarter.",
+        "candidates": 81614,
+        "evaluated": 2224,
+        "passed": 2069,
+        "failed": 155,
+        "skipped": 79390,
+        "failure_rate": 0.06969424460431654,
+        "coverage": 0.027250226676795646,
+        "seconds": 0.6155547999951523,
+        "run_at": "2026-09-23 15:47:39.786354"
+      },
+      {
+        "rule_id": "R09",
+        "rule_name": "restatement_detected",
+        "category": "restatement",
+        "severity": "info",
+        "unit": "consolidated fact (company, tag, period, duration, unit) reported in two or more filings",
+        "description": "The same fact reported with materially different values (>0.1%) in different filings. Both values are kept in the restatements table; the later filing is authoritative.",
+        "candidates": 2083283,
+        "evaluated": 2083283,
+        "passed": 1989142,
+        "failed": 94141,
+        "skipped": 0,
+        "failure_rate": 0.04518877176072574,
+        "coverage": 1.0,
+        "seconds": 4.008354599995073,
+        "run_at": "2026-09-23 15:47:43.796832"
+      },
+      {
+        "rule_id": "R10",
+        "rule_name": "amendment_detected",
+        "category": "restatement",
+        "severity": "info",
+        "unit": "original (non-amended) in-scope filing",
+        "description": "An original 10-K/10-Q that was later superseded by a 10-K/A or 10-Q/A for the same company and period. Computed from the data rather than the stale prevrpt flag.",
+        "candidates": 44971,
+        "evaluated": 44971,
+        "passed": 44417,
+        "failed": 554,
+        "skipped": 0,
+        "failure_rate": 0.012319050054479554,
+        "coverage": 1.0,
+        "seconds": 0.06463159999111667,
+        "run_at": "2026-09-23 15:47:43.865128"
+      },
+      {
+        "rule_id": "R11",
+        "rule_name": "duplicate_filing",
+        "category": "duplicate",
+        "severity": "warn",
+        "unit": "original (non-amended) in-scope filing",
+        "description": "The same company filed the same form for the same period more than once without marking it as an amendment.",
+        "candidates": 44971,
+        "evaluated": 44971,
+        "passed": 44963,
+        "failed": 8,
+        "skipped": 0,
+        "failure_rate": 0.00017789241955927152,
+        "coverage": 1.0,
+        "seconds": 1.4138123000157066,
+        "run_at": "2026-09-23 15:47:45.280966"
+      },
+      {
+        "rule_id": "R12",
+        "rule_name": "duplicate_fact_rows",
+        "category": "duplicate",
+        "severity": "error",
+        "unit": "raw num.txt row (all forms, all quarters)",
+        "description": "Exact duplicates of the num.txt primary key (adsh, tag, version, ddate, qtrs, uom, segments, coreg) inside one dataset quarter. Every row of a duplicated key counts as a failure.",
+        "candidates": 29148155,
+        "evaluated": 29148155,
+        "passed": 29147749,
+        "failed": 406,
+        "skipped": 0,
+        "failure_rate": 1.392884043604132e-05,
+        "coverage": 1.0,
+        "seconds": 3.8635918000072706,
+        "run_at": "2026-09-23 15:47:49.146830"
+      },
+      {
+        "rule_id": "R13",
+        "rule_name": "outlier_robust_z",
+        "category": "outlier",
+        "severity": "error",
+        "unit": "normalized monetary or share value (company, metric, period, duration)",
+        "description": "Value more than 5 robust sigmas from the company's own history for the same metric and duration (z = (x - median) / (1.4826 * MAD); mean absolute deviation fallback when MAD = 0). Skipped with fewer than 9 observations or a constant history.",
+        "candidates": 1533499,
+        "evaluated": 760964,
+        "passed": 728927,
+        "failed": 32037,
+        "skipped": 772535,
+        "failure_rate": 0.04210054614935792,
+        "coverage": 0.4962272554465311,
+        "seconds": 1.2563688000082038,
+        "run_at": "2026-09-23 15:47:50.405244"
+      },
+      {
+        "rule_id": "R14",
+        "rule_name": "missing_mandatory_tags",
+        "category": "completeness",
+        "severity": "error",
+        "unit": "10-K / 10-Q filing that carries a balance sheet",
+        "description": "Every primary filing must report the mandatory canonical metrics for its form (config/mandatory_tags.yaml) after alias resolution; revenue is not required for financial-sector SICs, and only required when the filing reports cost of revenue or gross profit (pre-revenue and investment companies have no revenue line).",
+        "candidates": 45854,
+        "evaluated": 45854,
+        "passed": 44161,
+        "failed": 1693,
+        "skipped": 0,
+        "failure_rate": 0.036921533563047934,
+        "coverage": 1.0,
+        "seconds": 58.83927689999109,
+        "run_at": "2026-09-23 15:48:49.246933"
+      },
+      {
+        "rule_id": "R15",
+        "rule_name": "unit_inconsistency",
+        "category": "unit",
+        "severity": "error",
+        "unit": "consolidated fact with a typed tag (monetary / shares / perShare / pure)",
+        "description": "The unit of measure must match the tag's datatype (monetary -> ISO currency, shares -> shares, perShare -> ISO currency (FSDS stores per-share units as the bare currency), pure -> pure); additionally a monetary tag must not be reported in two currencies inside one filing.",
+        "candidates": 9336484,
+        "evaluated": 9336484,
+        "passed": 9336208,
+        "failed": 276,
+        "skipped": 0,
+        "failure_rate": 2.9561449470700104e-05,
+        "coverage": 1.0,
+        "seconds": 7.662803899991559,
+        "run_at": "2026-09-23 15:48:56.911520"
+      },
+      {
+        "rule_id": "R16",
+        "rule_name": "gross_profit_consistency",
+        "category": "identity",
+        "severity": "error",
+        "unit": "company flow period with a reported GrossProfit",
+        "description": "Revenue - cost of revenue must equal reported gross profit within 0.5%. Skipped when revenue or cost of revenue is not reported.",
+        "candidates": 38999,
+        "evaluated": 36933,
+        "passed": 36297,
+        "failed": 636,
+        "skipped": 2066,
+        "failure_rate": 0.017220372025018277,
+        "coverage": 0.9470242826739147,
+        "seconds": 0.029276200017193332,
+        "run_at": "2026-09-23 15:48:56.942557"
+      },
+      {
+        "rule_id": "R17",
+        "rule_name": "cash_flow_identity",
+        "category": "identity",
+        "severity": "error",
+        "unit": "company flow period with reported operating cash flow",
+        "description": "Operating + investing + financing cash flow (+ FX effect) must equal the reported change in cash within 0.5%, pairing the including-FX or excluding-FX variant of the change-in-cash tag. Skipped when a component or the change-in-cash total is not reported.",
+        "candidates": 71399,
+        "evaluated": 61280,
+        "passed": 60036,
+        "failed": 1244,
+        "skipped": 10119,
+        "failure_rate": 0.020300261096605744,
+        "coverage": 0.8582753259849578,
+        "seconds": 0.0428165000048466,
+        "run_at": "2026-09-23 15:48:56.986165"
+      },
+      {
+        "rule_id": "R18",
+        "rule_name": "eps_consistency",
+        "category": "plausibility",
+        "severity": "error",
+        "unit": "company flow period with reported basic EPS",
+        "description": "Net income / weighted-average basic shares must agree with reported basic EPS within 5% (floor 0.01). Catches share counts or EPS reported at the wrong scale. Skipped when net income or basic shares are missing or zero.",
+        "candidates": 92255,
+        "evaluated": 79711,
+        "passed": 71796,
+        "failed": 7915,
+        "skipped": 12544,
+        "failure_rate": 0.09929620754977356,
+        "coverage": 0.8640290499159937,
+        "seconds": 0.05301329999929294,
+        "run_at": "2026-09-23 15:48:57.041678"
+      },
+      {
+        "rule_id": "R19",
+        "rule_name": "fiscal_period_validity",
+        "category": "referential",
+        "severity": "error",
+        "unit": "in-scope filing",
+        "description": "Submission metadata must be coherent: period and filed present, fp in the allowed set, fy within one year of the period, period not after the filing date, and 10-K forms tagged fp = FY.",
+        "candidates": 45957,
+        "evaluated": 45957,
+        "passed": 45948,
+        "failed": 9,
+        "skipped": 0,
+        "failure_rate": 0.0001958352372870292,
+        "coverage": 1.0,
+        "seconds": 0.028222799999639392,
+        "run_at": "2026-09-23 15:48:57.072141"
+      },
+      {
+        "rule_id": "R20",
+        "rule_name": "tag_referential_integrity",
+        "category": "referential",
+        "severity": "error",
+        "unit": "raw num.txt row and raw pre.txt row (all forms, all quarters)",
+        "description": "Every (tag, version) used in num.txt and pre.txt must exist in tag.txt, and every num.txt accession must exist in sub.txt.",
+        "candidates": 35111878,
+        "evaluated": 35111878,
+        "passed": 35111878,
+        "failed": 0,
+        "skipped": 0,
+        "failure_rate": 0.0,
+        "coverage": 1.0,
+        "seconds": 1.027977000019746,
+        "run_at": "2026-09-23 15:48:58.101348"
+      },
+      {
+        "rule_id": "R21",
+        "rule_name": "instant_duration_consistency",
+        "category": "referential",
+        "severity": "error",
+        "unit": "modelled fact whose tag declares an instant/duration period type",
+        "description": "Instant tags (iord = I, balance-sheet items) must be reported with qtrs = 0. Duration tags with qtrs = 0 are skipped: FSDS rounds durations shorter than ~45 days (e.g. a share issuance on a single date) to zero quarters, so they cannot be judged.",
+        "candidates": 24184064,
+        "evaluated": 24049856,
+        "passed": 24049856,
+        "failed": 0,
+        "skipped": 134208,
+        "failure_rate": 0.0,
+        "coverage": 0.9944505605013285,
+        "seconds": 2.5868851999985054,
+        "run_at": "2026-09-23 15:49:00.689938"
+      },
+      {
+        "rule_id": "R22",
+        "rule_name": "value_magnitude_plausibility",
+        "category": "plausibility",
+        "severity": "error",
+        "unit": "consolidated monetary / share / per-share fact",
+        "description": "Values beyond physically plausible magnitudes (USD > 1e14, shares > 1e13, per-share > 1e5) indicate scaling errors in the filing.",
+        "candidates": 10264205,
+        "evaluated": 10264205,
+        "passed": 10263937,
+        "failed": 268,
+        "skipped": 0,
+        "failure_rate": 2.611015660735537e-05,
+        "coverage": 1.0,
+        "seconds": 1.2168823000101838,
+        "run_at": "2026-09-23 15:49:01.908545"
+      }
+    ],
+    "dq_rules_count": 22,
+    "dq_total_evaluated": 112697176,
+    "dq_total_failed": 144916,
+    "dq_pass_rate": 0.9987141115230784,
+    "dq_categories": [
+      {
+        "category": "restatement",
+        "failed": 94695,
+        "evaluated": 2128254,
+        "share": 0.653447514422148
+      },
+      {
+        "category": "outlier",
+        "failed": 32037,
+        "evaluated": 760964,
+        "share": 0.22107289740263325
+      },
+      {
+        "category": "plausibility",
+        "failed": 8215,
+        "evaluated": 10424735,
+        "share": 0.056688012365784315
+      },
+      {
+        "category": "identity",
+        "failed": 4430,
+        "evaluated": 194230,
+        "share": 0.030569433326892822
+      },
+      {
+        "category": "continuity",
+        "failed": 2953,
+        "evaluated": 95741,
+        "share": 0.020377322034833972
+      },
+      {
+        "category": "completeness",
+        "failed": 1693,
+        "evaluated": 45854,
+        "share": 0.011682629937343012
+      },
+      {
+        "category": "duplicate",
+        "failed": 414,
+        "evaluated": 29193126,
+        "share": 0.0028568274034613157
+      },
+      {
+        "category": "unit",
+        "failed": 276,
+        "evaluated": 9336484,
+        "share": 0.0019045516023075437
+      },
+      {
+        "category": "sign",
+        "failed": 194,
+        "evaluated": 1310097,
+        "share": 0.001338706561042259
+      },
+      {
+        "category": "referential",
+        "failed": 9,
+        "evaluated": 59207691,
+        "share": 6.210494355350687e-05
+      }
+    ],
+    "outliers_flagged": 32037,
+    "warehouse_bytes": 1962946560
+  },
+  "bench": {
+    "queries": {
+      "company_search": {
+        "cold_p50_ms": 3.43209998391103,
+        "cold_p95_ms": 3.7426799899549223,
+        "warm_p50_ms": 4.22630000684876,
+        "warm_p95_ms": 6.151825010601897,
+        "cold_n": 20,
+        "warm_n": 50
+      },
+      "company_ratio_trend": {
+        "cold_p50_ms": 8.772750006755814,
+        "cold_p95_ms": 11.189555010059848,
+        "warm_p50_ms": 6.248949997825548,
+        "warm_p95_ms": 8.360245010408105,
+        "cold_n": 20,
+        "warm_n": 50
+      },
+      "multi_company_compare": {
+        "cold_p50_ms": 7.202950000646524,
+        "cold_p95_ms": 8.254380014841445,
+        "warm_p50_ms": 9.770400007255375,
+        "warm_p95_ms": 13.43072000599932,
+        "cold_n": 20,
+        "warm_n": 50
+      },
+      "sector_percentile": {
+        "cold_p50_ms": 21.768149978015572,
+        "cold_p95_ms": 23.248745007731486,
+        "warm_p50_ms": 33.60840000095777,
+        "warm_p95_ms": 39.44857000460615,
+        "cold_n": 20,
+        "warm_n": 50
+      },
+      "dq_summary": {
+        "cold_p50_ms": 2.9051000019535422,
+        "cold_p95_ms": 3.2473049839609303,
+        "warm_p50_ms": 2.903199987486005,
+        "warm_p95_ms": 4.319984998437573,
+        "cold_n": 20,
+        "warm_n": 50
+      }
+    },
+    "connect_p50_ms": 614.6887999930186,
+    "process_wall_p50_ms": 981.495250001899,
+    "dashboard": {
+      "cold_ms": 2595.1048999850173,
+      "warm_ms": 1624.854099994991,
+      "exception": []
+    },
+    "definitions": {
+      "cold": "fresh Python process + fresh read-only DuckDB connection per run; OS page cache not dropped",
+      "warm": "same connection, 50 timed runs after 5 warm-ups",
+      "dashboard": "streamlit.testing.v1.AppTest full script execution (server side, no browser render); cold = first run in a fresh process, warm = second run in the same process"
+    }
+  },
+  "bench_baseline": {
+    "queries": {
+      "company_search": {
+        "cold_p50_ms": 554.4974999938859,
+        "cold_p95_ms": 613.9744099869858,
+        "warm_p50_ms": 2.350700000533834,
+        "warm_p95_ms": 2.523300005123019,
+        "cold_n": 20,
+        "warm_n": 50
+      },
+      "company_ratio_trend": {
+        "cold_p50_ms": 8.811899984721094,
+        "cold_p95_ms": 10.155694991408382,
+        "warm_p50_ms": 3.650799990282394,
+        "warm_p95_ms": 4.3782149979961105,
+        "cold_n": 20,
+        "warm_n": 50
+      },
+      "multi_company_compare": {
+        "cold_p50_ms": 7.045499995001592,
+        "cold_p95_ms": 8.335410006111488,
+        "warm_p50_ms": 4.500600014580414,
+        "warm_p95_ms": 5.152560000715312,
+        "cold_n": 20,
+        "warm_n": 50
+      },
+      "sector_percentile": {
+        "cold_p50_ms": 125.07460000051651,
+        "cold_p95_ms": 132.00506498542381,
+        "warm_p50_ms": 115.1081500138389,
+        "warm_p95_ms": 125.8296199986944,
+        "cold_n": 20,
+        "warm_n": 50
+      },
+      "dq_summary": {
+        "cold_p50_ms": 2.9350999975576997,
+        "cold_p95_ms": 3.302625005017035,
+        "warm_p50_ms": 1.6120499931275845,
+        "warm_p95_ms": 1.6680050088325515,
+        "cold_n": 20,
+        "warm_n": 50
+      }
+    },
+    "connect_p50_ms": 18.794199990225025,
+    "process_wall_p50_ms": 1041.0306499979924,
+    "dashboard": {
+      "cold_ms": 2554.899100010516,
+      "warm_ms": 875.5046000005677,
+      "exception": []
+    },
+    "definitions": {
+      "cold": "fresh Python process + fresh read-only DuckDB connection per run; OS page cache not dropped",
+      "warm": "same connection, 50 timed runs after 5 warm-ups",
+      "dashboard": "streamlit.testing.v1.AppTest full script execution (server side, no browser render); cold = first run in a fresh process, warm = second run in the same process"
+    }
+  },
+  "bench_control": {
+    "queries": {
+      "company_search": {
+        "cold_p50_ms": 630.3118499927223,
+        "cold_p95_ms": 684.8279349840595,
+        "warm_p50_ms": 4.0772000211291015,
+        "warm_p95_ms": 4.450324991194066,
+        "cold_n": 20,
+        "warm_n": 50
+      },
+      "company_ratio_trend": {
+        "cold_p50_ms": 9.110950006288476,
+        "cold_p95_ms": 10.144025002955459,
+        "warm_p50_ms": 6.41310001083184,
+        "warm_p95_ms": 7.516240005497821,
+        "cold_n": 20,
+        "warm_n": 50
+      },
+      "multi_company_compare": {
+        "cold_p50_ms": 7.220699990284629,
+        "cold_p95_ms": 8.058234975032974,
+        "warm_p50_ms": 9.63119998050388,
+        "warm_p95_ms": 12.097800013725644,
+        "cold_n": 20,
+        "warm_n": 50
+      },
+      "sector_percentile": {
+        "cold_p50_ms": 131.24495001102332,
+        "cold_p95_ms": 137.3606200053473,
+        "warm_p50_ms": 235.59000001114327,
+        "warm_p95_ms": 255.9917800099356,
+        "cold_n": 20,
+        "warm_n": 50
+      },
+      "dq_summary": {
+        "cold_p50_ms": 2.9492500034393743,
+        "cold_p95_ms": 3.2875000179046765,
+        "warm_p50_ms": 2.8837499994551763,
+        "warm_p95_ms": 3.361004994076211,
+        "cold_n": 20,
+        "warm_n": 50
+      }
+    },
+    "connect_p50_ms": 20.79184999456629,
+    "process_wall_p50_ms": 1155.8094999927562,
+    "dashboard": {
+      "cold_ms": 3617.17980002868,
+      "warm_ms": 1840.4429000220262,
+      "exception": []
+    },
+    "definitions": {
+      "cold": "fresh Python process + fresh read-only DuckDB connection per run; OS page cache not dropped",
+      "warm": "same connection, 50 timed runs after 5 warm-ups",
+      "dashboard": "streamlit.testing.v1.AppTest full script execution (server side, no browser render); cold = first run in a fresh process, warm = second run in the same process"
+    }
+  },
+  "tests": {
+    "exit_code": 0,
+    "summary_line": "______________ coverage: platform win32, python 3.12.13-final-0 _______________\n\nCoverage JSON written to file C:\\Users\\Omar\\Desktop\\Projects\\FinanceProject\\reports\\coverage.json",
+    "tests": 104,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 104,
+    "seconds": 29.386,
+    "line_coverage_pct": 72.57853403141361,
+    "lines_covered": 1109,
+    "lines_total": 1528
+  },
+  "storage": {
+    "zip_bytes": 787302699,
+    "extracted_bytes": 5218371291,
+    "parquet_bytes": 489245626,
+    "warehouse_bytes": 1962946560,
+    "warehouse_vs_zip": 2.4932552149170264,
+    "warehouse_vs_extracted": 0.3761607694311532,
+    "parquet_vs_zip": 0.621419978137278,
+    "parquet_vs_extracted": 0.09375446834221823,
+    "extracted_vs_zip": 6.628163853150972
+  }
+}

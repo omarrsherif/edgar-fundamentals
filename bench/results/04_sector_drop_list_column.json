@@ -1,0 +1,56 @@
+{
+  "queries": {
+    "company_search": {
+      "cold_p50_ms": 3.5146000009262934,
+      "cold_p95_ms": 3.7824850078322925,
+      "warm_p50_ms": 4.3475499987835065,
+      "warm_p95_ms": 6.73665000940673,
+      "cold_n": 20,
+      "warm_n": 50
+    },
+    "company_ratio_trend": {
+      "cold_p50_ms": 8.743099984712899,
+      "cold_p95_ms": 9.67809498833958,
+      "warm_p50_ms": 6.642349995672703,
+      "warm_p95_ms": 10.717294998175925,
+      "cold_n": 20,
+      "warm_n": 50
+    },
+    "multi_company_compare": {
+      "cold_p50_ms": 7.081600007950328,
+      "cold_p95_ms": 7.64421501517063,
+      "warm_p50_ms": 8.656649995828047,
+      "warm_p95_ms": 12.054170000192242,
+      "cold_n": 20,
+      "warm_n": 50
+    },
+    "sector_percentile": {
+      "cold_p50_ms": 78.90675000089686,
+      "cold_p95_ms": 81.68988000688842,
+      "warm_p50_ms": 125.16514999151696,
+      "warm_p95_ms": 137.25459001288982,
+      "cold_n": 20,
+      "warm_n": 50
+    },
+    "dq_summary": {
+      "cold_p50_ms": 2.9109500028425828,
+      "cold_p95_ms": 3.173129991046153,
+      "warm_p50_ms": 2.794450003420934,
+      "warm_p95_ms": 3.0510650016367435,
+      "cold_n": 20,
+      "warm_n": 50
+    }
+  },
+  "connect_p50_ms": 604.051399990567,
+  "process_wall_p50_ms": 1034.5113499934087,
+  "dashboard": {
+    "cold_ms": null,
+    "warm_ms": null,
+    "error": "ost recent call last):\n  File \"<string>\", line 9, in <module>\nAssertionError: ElementList(_list=[Exception(message=\"'source_adshs'\", stack_trace=['File \"C:\\\\Users\\\\Omar\\\\Desktop\\\\Projects\\\\FinanceProject\\\\.venv\\\\Lib\\\\site-packages\\\\pandas\\\\core\\\\indexes\\\\base.py\", line 3641, in get_loc\\n    return self._engine.get_loc(casted_key)\\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^', 'File \"pandas/_libs/index.pyx\", line 168, in pandas._libs.index.IndexEngine.get_loc', 'File \"pandas/_libs/index.pyx\", line 197, in pandas._libs.index.IndexEngine.get_loc', 'File \"pandas/_libs/hashtable_class_helper.pxi\", line 7668, in pandas._libs.hashtable.PyObjectHashTable.get_item', 'File \"pandas/_libs/hashtable_class_helper.pxi\", line 7676, in pandas._libs.hashtable.PyObjectHashTable.get_item', \"KeyError: 'source_adshs'\", 'The above exception was the direct cause of the following exception:', 'File \"C:\\\\Users\\\\Omar\\\\Desktop\\\\Projects\\\\FinanceProject\\\\src\\\\edgar_fundamentals\\\\dashboard\\\\app.py\", line 182, in <module>\\n    src = latest.set_index(\"cik\").loc[focus, \"source_adshs\"]\\n          ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^', 'File \"C:\\\\Users\\\\Omar\\\\Desktop\\\\Projects\\\\FinanceProject\\\\.venv\\\\Lib\\\\site-packages\\\\pandas\\\\core\\\\indexing.py\", line 1199, in __getitem__\\n    return self.obj._get_value(*key, takeable=self._takeable)\\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^', 'File \"C:\\\\Users\\\\Omar\\\\Desktop\\\\Projects\\\\FinanceProject\\\\.venv\\\\Lib\\\\site-packages\\\\pandas\\\\core\\\\frame.py\", line 4489, in _get_value\\n    series = self._get_item(col)\\n             ^^^^^^^^^^^^^^^^^^^', 'File \"C:\\\\Users\\\\Omar\\\\Desktop\\\\Projects\\\\FinanceProject\\\\.venv\\\\Lib\\\\site-packages\\\\pandas\\\\core\\\\frame.py\", line 4969, in _get_item\\n    loc = self.columns.get_loc(item)\\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^', 'File \"C:\\\\Users\\\\Omar\\\\Desktop\\\\Projects\\\\FinanceProject\\\\.venv\\\\Lib\\\\site-packages\\\\pandas\\\\core\\\\indexes\\\\base.py\", line 3648, in get_loc\\n    raise KeyError(key) from err'])])\n"
+  },
+  "definitions": {
+    "cold": "fresh Python process + fresh read-only DuckDB connection per run; OS page cache not dropped",
+    "warm": "same connection, 50 timed runs after 5 warm-ups",
+    "dashboard": "streamlit.testing.v1.AppTest full script execution (server side, no browser render); cold = first run in a fresh process, warm = second run in the same process"
+  }
+}

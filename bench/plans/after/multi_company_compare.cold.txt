@@ -1,0 +1,152 @@
+-- multi_company_compare | COLD: EXPLAIN ANALYZE as the first statement of a fresh process + fresh read-only connection
+-- wall-clock of the EXPLAIN ANALYZE call as seen from Python: 11.0 ms
+-- params: [[320193, 789019, 1652044, 1018724, 1045810], 'FY']
+
+SELECT r.cik, c.name, r.period_end, r.basis, r.fiscal_year, r.ratio, r.value, r.status, r.source_adshs
+FROM fact_ratios r
+JOIN dim_company c USING (cik)
+WHERE list_contains($1::BIGINT[], r.cik) AND r.basis = $2
+ORDER BY r.period_end, r.cik, r.ratio
+
+
+┌─────────────────────────────────────┐
+│┌───────────────────────────────────┐│
+││    Query Profiling Information    ││
+│└───────────────────────────────────┘│
+└─────────────────────────────────────┘
+EXPLAIN ANALYZE  SELECT r.cik, c.name, r.period_end, r.basis, r.fiscal_year, r.ratio, r.value, r.status, r.source_adshs FROM fact_ratios r JOIN dim_company c USING (cik) WHERE list_contains($1::BIGINT[], r.cik) AND r.basis = $2 ORDER BY r.period_end, r.cik, r.ratio 
+┌────────────────────────────────────────────────┐
+│┌──────────────────────────────────────────────┐│
+││              Total Time: 0.0100s             ││
+│└──────────────────────────────────────────────┘│
+└────────────────────────────────────────────────┘
+┌───────────────────────────┐
+│           QUERY           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│      EXPLAIN_ANALYZE      │
+│    ────────────────────   │
+│                           │
+│           0 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│__internal_decompress_integ│
+│    ral_bigint(#0, 1750)   │
+│             #1            │
+│             #2            │
+│__internal_decompress_strin│
+│           g(#3)           │
+│__internal_decompress_integ│
+│   ral_integer(#4, 2017)   │
+│             #5            │
+│             #6            │
+│__internal_decompress_strin│
+│           g(#7)           │
+│             #8            │
+│                           │
+│                           │
+│                           │
+│          377 rows         │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          ORDER_BY         │
+│    ────────────────────   │
+│      r.period_end ASC     │
+│         r.cik ASC         │
+│        r.ratio ASC        │
+│                           │
+│                           │
+│                           │
+│          377 rows         │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│__internal_compress_integra│
+│    l_uinteger(#0, 1750)   │
+│             #1            │
+│             #2            │
+│__internal_compress_string_│
+│        uinteger(#3)       │
+│__internal_compress_integra│
+│    l_utinyint(#4, 2017)   │
+│             #5            │
+│             #6            │
+│__internal_compress_string_│
+│        uhugeint(#7)       │
+│             #8            │
+│                           │
+│                           │
+│                           │
+│          377 rows         │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            cik            │
+│            name           │
+│         period_end        │
+│           basis           │
+│        fiscal_year        │
+│           ratio           │
+│           value           │
+│           status          │
+│        source_adshs       │
+│                           │
+│                           │
+│                           │
+│          377 rows         │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         HASH_JOIN         │
+│    ────────────────────   │
+│      Join Type: INNER     │
+│   Conditions: cik = cik   │
+│                           ├──────────────┐
+│                           │              │
+│                           │              │
+│          377 rows         │              │
+│           0.00s           │              │
+└─────────────┬─────────────┘              │
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│         TABLE_SCAN        ││         TABLE_SCAN        │
+│    ────────────────────   ││    ────────────────────   │
+│           Table:          ││           Table:          │
+│ warehouse.main.fact_ratios││ warehouse.main.dim_company│
+│                           ││                           │
+│   Type: Sequential Scan   ││   Type: Sequential Scan   │
+│                           ││                           │
+│        Projections:       ││        Projections:       │
+│            cik            ││            cik            │
+│           basis           ││            name           │
+│         period_end        ││                           │
+│        fiscal_year        ││   Filters: cik<=2115404   │
+│           ratio           ││                           │
+│           value           ││                           │
+│           status          ││                           │
+│        source_adshs       ││                           │
+│                           ││           0.00s           │
+│          Filters:         ││                           │
+│   list_contains([320193,  ││                           │
+│  789019, 1652044, 1018724,││                           │
+│       1045810], cik)      ││                           │
+│         basis='FY'        ││                           │
+│                           ││                           │
+│      Dynamic Filters:     ││                           │
+│  optional: cik>=1750 AND  ││                           │
+│   optional: cik<=2115404  ││                           │
+│   AND optional: cik IN BF ││                           │
+│           (cik)           ││                           │
+│                           ││                           │
+│                           ││                           │
+│                           ││                           │
+│          377 rows         ││         7,914 rows        │
+│           0.04s           ││          (0.00s)          │
+└───────────────────────────┘└───────────────────────────┘

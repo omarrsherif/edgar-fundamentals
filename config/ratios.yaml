@@ -1,0 +1,77 @@
+# Ratio definitions. Inputs are canonical metrics from aliases.yaml.
+# kind: instant inputs come from the balance sheet at period_end (qtrs=0);
+#       flow inputs come from qtrs=4 (FY basis) or qtrs=1 (Q basis, derived from YTD when needed).
+# A ratio is NULL with an explicit reason whenever an input is missing or a denominator is zero/non-positive.
+conventions:
+  balances: ending balances (not averages) - keeps coverage high; documented in README
+  quarterly_returns: unannualized on the Q basis (ROA/ROE/asset turnover)
+  quick_ratio: (current assets - inventory) / current liabilities; missing inventory treated as 0 with status=estimated
+  debt_to_equity: interest-bearing debt (short-term borrowings + current LTD + non-current LTD) / parent equity
+  yoy_revenue_growth: revenue vs same period one year earlier (same basis); prior period matched on month-end date with a +/- 1 month fallback
+
+ratios:
+  gross_margin:
+    formula: "(revenue - cost_of_revenue) / revenue, or gross_profit / revenue"
+    inputs: [revenue, cost_of_revenue, gross_profit]
+    kind: flow
+    unit: ratio
+  operating_margin:
+    formula: "operating_income / revenue"
+    inputs: [operating_income, revenue]
+    kind: flow
+    unit: ratio
+  net_margin:
+    formula: "net_income / revenue"
+    inputs: [net_income, revenue]
+    kind: flow
+    unit: ratio
+  current_ratio:
+    formula: "current_assets / current_liabilities"
+    inputs: [current_assets, current_liabilities]
+    kind: instant
+    unit: ratio
+  quick_ratio:
+    formula: "(current_assets - inventory) / current_liabilities"
+    inputs: [current_assets, inventory, current_liabilities]
+    kind: instant
+    unit: ratio
+  debt_to_equity:
+    formula: "(short_term_borrowings + ltd_current + ltd_noncurrent) / equity_parent"
+    inputs: [short_term_borrowings, ltd_current, ltd_noncurrent, equity_parent]
+    kind: instant
+    unit: ratio
+  liabilities_to_equity:
+    formula: "total_liabilities / equity_parent"
+    inputs: [total_liabilities, equity_parent]
+    kind: instant
+    unit: ratio
+  roa:
+    formula: "net_income / total_assets"
+    inputs: [net_income, total_assets]
+    kind: mixed
+    unit: ratio
+  roe:
+    formula: "net_income / equity_parent"
+    inputs: [net_income, equity_parent]
+    kind: mixed
+    unit: ratio
+  asset_turnover:
+    formula: "revenue / total_assets"
+    inputs: [revenue, total_assets]
+    kind: mixed
+    unit: ratio
+  free_cash_flow:
+    formula: "operating_cash_flow - capex"
+    inputs: [operating_cash_flow, capex]
+    kind: flow
+    unit: currency
+  working_capital:
+    formula: "current_assets - current_liabilities"
+    inputs: [current_assets, current_liabilities]
+    kind: instant
+    unit: currency
+  yoy_revenue_growth:
+    formula: "revenue / revenue_prior_year - 1"
+    inputs: [revenue, revenue_prior_year]
+    kind: flow
+    unit: ratio

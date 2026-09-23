@@ -1,0 +1,36 @@
+# Thresholds for the data-quality rules (rule logic lives in quality/rules/*.sql).
+# Identity checks pass when |a - b| <= max(rel * max(|a|, |b|), abs_floor).
+tolerances:
+  face_total_rel: 0.001        # two-term totals that appear on the face of a statement
+  multi_term_rel: 0.005        # identities that add three or more separately rounded terms
+  abs_floor: 1000              # absolute floor in reporting currency units (USD 1,000)
+  eps_rel: 0.05                # NI / weighted shares vs reported EPS
+  restatement_rel: 0.001       # relative difference above which two filings disagree materially
+  outlier_sigma: 5.0           # robust z-score threshold
+  outlier_min_history: 8       # other observations required before a point can be judged
+  magnitude_usd_max: 1.0e14
+  magnitude_shares_max: 1.0e13
+  magnitude_eps_max: 1.0e5
+
+# Tags that must be >= 0 (natural debit/credit balance is always positive).
+non_negative_tags:
+  - Assets
+  - AssetsCurrent
+  - Liabilities
+  - LiabilitiesCurrent
+  - LiabilitiesAndStockholdersEquity
+  - InventoryNet
+  - AccountsReceivableNetCurrent
+  - CashAndCashEquivalentsAtCarryingValue
+  - CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents
+  - CostOfRevenue
+  - CostOfGoodsAndServicesSold
+  - PaymentsToAcquirePropertyPlantAndEquipment
+  - WeightedAverageNumberOfSharesOutstandingBasic
+  - WeightedAverageNumberOfDilutedSharesOutstanding
+  - CommonStockSharesOutstanding
+  - dei:EntityCommonStockSharesOutstanding
+  - PropertyPlantAndEquipmentNet
+  - Goodwill
+
+allowed_fp: ["FY", "Q1", "Q2", "Q3", "Q4", "H1", "H2", "M9", "T1", "T2", "T3", "CY"]

@@ -1,0 +1,35 @@
+# edgar-fundamentals runtime settings
+dataset:
+  # The ingest window is the N quarters ending at latest_quarter (inclusive).
+  latest_quarter: "2026q2"
+  n_quarters: 8
+  url_template: "https://www.sec.gov/files/dera/data/financial-statement-data-sets/{quarter}.zip"
+  index_page: "https://www.sec.gov/dera/data/financial-statement-data-sets"
+  # Forms modelled in the warehouse; every other form stays in the Parquet layer.
+  in_scope_forms: ["10-K", "10-K/A", "10-KT", "10-KT/A", "10-Q", "10-Q/A", "10-QT", "10-QT/A"]
+
+http:
+  user_agent_template: "edgar-fundamentals/0.1 ({email})"
+  min_interval_seconds: 1.0
+  max_retries: 5
+  backoff_base_seconds: 2.0
+  timeout_seconds: 120
+  chunk_bytes: 1048576
+
+paths:
+  data_dir: "data"
+  raw_dir: "data/raw"
+  extracted_dir: "data/extracted"
+  parquet_dir: "data/parquet"
+  warehouse: "data/warehouse.duckdb"
+  manifest: "data/manifest.json"
+  logs_dir: "data/logs"
+  reports_dir: "reports"
+  temp_dir: "data/tmp"
+
+duckdb:
+  memory_limit: "16GB"
+  threads: 20
+
+ingest:
+  max_reject_rate: 0.0001

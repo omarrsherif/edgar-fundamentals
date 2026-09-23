@@ -1,0 +1,126 @@
+# METRICS
+
+Generated {{ m.generated_at }} by `edgar-fundamentals metrics`. Every number below was measured on this machine
+(Windows 11, 24 logical cores, 32 GB RAM, NVMe SSD, DuckDB {{ m.warehouse.duckdb_version if m.warehouse.duckdb_version else "1.5" }}).
+
+## Data volume
+
+| metric | value |
+|---|---|
+| quarters ingested | {{ m.ingest.n_quarters }} ({{ m.ingest.first_quarter }} to {{ m.ingest.last_quarter }}) |
+| rows ingested, all four files | {{ n(m.ingest.total_rows) }} |
+| of which num.txt (numeric facts) | {{ n(m.ingest.total_rows_num) }} |
+| of which sub.txt (submissions) | {{ n(m.ingest.total_rows_sub) }} |
+| of which tag.txt | {{ n(m.ingest.total_rows_tag) }} |
+| of which pre.txt | {{ n(m.ingest.total_rows_pre) }} |
+| rows rejected by the CSV parser | {{ n(m.ingest.total_rejects) }} |
+| filings covered (10-K / 10-Q families, modelled) | {{ n(m.warehouse.filings_in_scope) }} of {{ n(m.warehouse.filings_total) }} submissions |
+| distinct companies (modelled) | {{ n(m.warehouse.companies_in_scope) }} of {{ n(m.warehouse.companies_total) }} |
+| fact_financial_facts rows | {{ n(m.warehouse.table_counts.fact_financial_facts) }} |
+| fact_normalized rows | {{ n(m.warehouse.normalized_rows) }} ({{ n(m.warehouse.normalized_derived) }} derived; {{ m.warehouse.normalized_metrics }} canonical metrics) |
+| current-period span of modelled filings | {{ m.warehouse.period_min }} to {{ m.warehouse.period_max }} |
+
+Forms in scope: {% for f, c in m.warehouse.forms %}{{ f }} {{ n(c) }}{{ ", " if not loop.last }}{% endfor %}.
+
+## Ingest performance
+
+| quarter | ZIP bytes | download s | extract s | parse s | rows | rows/s (parse) | rejects |
+|---|---:|---:|---:|---:|---:|---:|---:|
+{% for q in m.ingest.quarters -%}
+| {{ q.quarter }} | {{ n(q.zip_bytes) }} | {{ f1(q.download_seconds) }} | {{ f1(q.extract_seconds) }} | {{ f1(q.parse_seconds) }} | {{ n(q.rows) }} | {{ n(q.rows_per_second) }} | {{ q.rejects }} |
+{% endfor %}
+| **total** | {{ n(m.ingest.zip_bytes) }} | {{ f1(m.ingest.download_seconds) }} | {{ f1(m.ingest.extract_seconds) }} | {{ f1(m.ingest.parse_seconds) }} | {{ n(m.ingest.total_rows) }} | {{ n(m.ingest.rows_per_second_parse) }} | {{ m.ingest.total_rejects }} |
+
+- Ingest wall-clock (download + extract + parse, sequential): **{{ f1(m.ingest.wall_seconds) }} s**
+- Rows per second: **{{ n(m.ingest.rows_per_second_parse) }}** during DuckDB parsing, **{{ n(m.ingest.rows_per_second_end_to_end) }}** end to end including download and extraction.
+- Warehouse build (Parquet to DuckDB dims, facts, restatements, normalized layer): **{{ f1(m.warehouse.build_seconds) }} s**
+- Download timings reflect the first run; re-runs report every quarter as cached and download nothing.
+
+## Storage and compression
+
+| artifact | size |
+|---|---:|
+| raw ZIPs (SEC download cache) | {{ mb(m.storage.zip_bytes) }} |
+| extracted tab-delimited text | {{ mb(m.storage.extracted_bytes) }} ({{ f1(m.storage.extracted_vs_zip) }}x the ZIPs) |
+| Parquet staging (ZSTD) | {{ mb(m.storage.parquet_bytes) }} |
+| DuckDB warehouse file | {{ mb(m.storage.warehouse_bytes) }} |
+
+- DuckDB warehouse vs raw ZIPs: **{{ f2(m.storage.warehouse_vs_zip) }}x**; vs extracted text: **{{ f2(m.storage.warehouse_vs_extracted) }}x**.
+- Parquet staging vs raw ZIPs: **{{ f2(m.storage.parquet_vs_zip) }}x**; vs extracted text: **{{ f2(m.storage.parquet_vs_extracted) }}x**.
+- The warehouse is larger than the ZIPs because deflate on repetitive text is very effective and the warehouse stores the modelled facts plus restatements, normalized values and quality results; `raw_num` remains a view over the Parquet files rather than a second copy.
+
+## Validation
+
+- Rules implemented: **{{ m.warehouse.dq_rules_count }}**
+- Units evaluated: {{ n(m.warehouse.dq_total_evaluated) }}; failures: {{ n(m.warehouse.dq_total_failed) }}; overall pass rate: **{{ pct3(m.warehouse.dq_pass_rate) }}**
+- Restatements detected: **{{ n(m.warehouse.restatement_groups) }}** facts reported with materially different values across filings ({{ n(m.warehouse.restatement_companies) }} companies, {{ n(m.warehouse.restatement_version_rows) }} version rows kept, later filing authoritative); a further {{ n(m.warehouse.rounding_groups) }} differ only within rounding tolerance.
+- Outliers flagged (robust z > 5 sigma vs the company's own history): **{{ n(m.warehouse.outliers_flagged) }}**
+
+| id | rule | category | severity | evaluated | failed | skipped | failure rate | coverage |
+|---|---|---|---|---:|---:|---:|---:|---:|
+{% for r in m.warehouse.dq_rules -%}
+| {{ r.rule_id }} | `{{ r.rule_name }}` | {{ r.category }} | {{ r.severity }} | {{ n(r.evaluated) }} | {{ n(r.failed) }} | {{ n(r.skipped) }} | {{ pct3(r.failure_rate) }} | {{ pct(r.coverage) }} |
+{% endfor %}
+
+Top failure categories by share of failing rows:
+
+| category | failed | evaluated | share of all failures |
+|---|---:|---:|---:|
+{% for c in m.warehouse.dq_categories -%}
+| {{ c.category }} | {{ n(c.failed) }} | {{ n(c.evaluated) }} | {{ pct(c.share) }} |
+{% endfor %}
+
+## Ratio layer
+
+- {{ m.warehouse.ratio_count }} ratios x {{ n(m.warehouse.ratio_company_periods) }} company-periods ({{ n(m.warehouse.ratio_companies) }} companies) = {{ n(m.warehouse.ratio_rows) }} rows, {{ n(m.warehouse.ratio_non_null) }} with a value.
+- Status mix: {% for s, c in m.warehouse.ratio_status %}{{ s }} {{ n(c) }}{{ ", " if not loop.last }}{% endfor %}.
+- Most common null reasons: {% for r, c in m.warehouse.ratio_null_reasons %}`{{ r }}` {{ n(c) }}{{ ", " if not loop.last }}{% endfor %}.
+
+## Query performance
+
+{% if m.bench %}
+Cold = {{ m.bench.definitions.cold }}. Warm = {{ m.bench.definitions.warm }}. Times are query execution inside the process (ms); a cold process additionally spends p50 {{ f1(m.bench.connect_p50_ms) }} ms opening the connection and {{ f1(m.bench.process_wall_p50_ms) }} ms total wall-clock including interpreter start-up.
+
+{% if m.bench_baseline %}
+**Baseline, before the optimization pass** (frozen copy `bench/results/00_baseline.json`, measured with the same harness; kept verbatim). A cold process then spent p50 {{ f1(m.bench_baseline.connect_p50_ms) }} ms opening the connection and {{ f1(m.bench_baseline.process_wall_p50_ms) }} ms total wall-clock.
+
+| query | cold p50 | cold p95 | warm p50 | warm p95 | runs (cold/warm) |
+|---|---:|---:|---:|---:|---:|
+{% for name, r in m.bench_baseline.queries.items() -%}
+| `{{ name }}` | {{ f1(r.cold_p50_ms) }} | {{ f1(r.cold_p95_ms) }} | {{ f1(r.warm_p50_ms) }} | {{ f1(r.warm_p95_ms) }} | {{ r.cold_n }}/{{ r.warm_n }} |
+{% endfor %}
+- Baseline dashboard load: cold {{ f2(m.bench_baseline.dashboard.cold_ms / 1000) }} s, warm {{ f2(m.bench_baseline.dashboard.warm_ms / 1000) }} s.
+
+**Current, after the optimization pass** (what changed, what each change moved and what it cost: [bench/OPTIMIZATION.md](bench/OPTIMIZATION.md)). "saved" = baseline minus current p50.
+
+| query | cold p50 | cold p95 | warm p50 | warm p95 | cold p50 saved | warm p50 saved | same-day control cold / warm p50 (no code change) | runs (cold/warm) |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+{% for name, r in m.bench.queries.items() -%}
+{% set b = m.bench_baseline.queries[name] -%}
+{% set c = m.bench_control.queries[name] if m.bench_control else None -%}
+| `{{ name }}` | {{ f1(r.cold_p50_ms) }} | {{ f1(r.cold_p95_ms) }} | {{ f1(r.warm_p50_ms) }} | {{ f1(r.warm_p95_ms) }} | {{ f1(b.cold_p50_ms - r.cold_p50_ms) }} ms ({{ "%.0f" | format(100 * (b.cold_p50_ms - r.cold_p50_ms) / b.cold_p50_ms) }}%) | {{ f1(b.warm_p50_ms - r.warm_p50_ms) }} ms ({{ "%.0f" | format(100 * (b.warm_p50_ms - r.warm_p50_ms) / b.warm_p50_ms) }}%) | {{ (f1(c.cold_p50_ms) ~ " / " ~ f1(c.warm_p50_ms)) if c else "n/a" }} | {{ r.cold_n }}/{{ r.warm_n }} |
+{% endfor %}
+{% if m.bench_control %}
+Negative "saved" values on the fast queries are within the same-day control column: the unchanged baseline code re-measured on the day of the optimization pass gave those warm numbers too (dashboard control: cold {{ f2(m.bench_control.dashboard.cold_ms / 1000) }} s, warm {{ f2(m.bench_control.dashboard.warm_ms / 1000) }} s). The offset is the machine on the day, not the code; details and the per-change table are in bench/OPTIMIZATION.md.
+{% endif %}
+{% else %}
+| query | cold p50 | cold p95 | warm p50 | warm p95 | runs (cold/warm) |
+|---|---:|---:|---:|---:|---:|
+{% for name, r in m.bench.queries.items() -%}
+| `{{ name }}` | {{ f1(r.cold_p50_ms) }} | {{ f1(r.cold_p95_ms) }} | {{ f1(r.warm_p50_ms) }} | {{ f1(r.warm_p95_ms) }} | {{ r.cold_n }}/{{ r.warm_n }} |
+{% endfor %}
+{% endif %}
+
+- Dashboard load ({{ m.bench.definitions.dashboard }}): **cold {{ f2(m.bench.dashboard.cold_ms / 1000) if m.bench.dashboard.cold_ms else "n/a" }} s**, warm {{ f2(m.bench.dashboard.warm_ms / 1000) if m.bench.dashboard.warm_ms else "n/a" }} s.
+{% else %}
+Benchmark not run yet (`edgar-fundamentals bench`).
+{% endif %}
+
+## Tests
+
+{% if m.tests %}
+- pytest: **{{ m.tests.passed }} passed**, {{ m.tests.failures }} failed, {{ m.tests.errors }} errors, {{ m.tests.skipped }} skipped ({{ m.tests.tests }} collected, {{ f1(m.tests.seconds) }} s)
+- Line coverage of `edgar_fundamentals` (excluding the Streamlit page script): **{{ f1(m.tests.line_coverage_pct) }}%** ({{ n(m.tests.lines_covered) }} of {{ n(m.tests.lines_total) }} statements)
+{% else %}
+Tests were not run for this report (`--no-tests`).
+{% endif %}

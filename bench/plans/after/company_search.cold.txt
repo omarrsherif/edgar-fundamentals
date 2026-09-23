@@ -1,0 +1,221 @@
+-- company_search | COLD: EXPLAIN ANALYZE as the first statement of a fresh process + fresh read-only connection
+-- wall-clock of the EXPLAIN ANALYZE call as seen from Python: 4.6 ms
+-- params: ['micro']
+
+SELECT cik, name, sic, sector, industry, n_in_scope_filings, last_filed
+FROM dim_company
+WHERE name ILIKE '%' || $1 || '%' OR CAST(cik AS VARCHAR) = $1
+ORDER BY (name ILIKE $1 || '%') DESC, (CAST(cik AS VARCHAR) = $1) DESC, n_in_scope_filings DESC, length(name), name
+LIMIT 25
+
+
+┌─────────────────────────────────────┐
+│┌───────────────────────────────────┐│
+││    Query Profiling Information    ││
+│└───────────────────────────────────┘│
+└─────────────────────────────────────┘
+EXPLAIN ANALYZE  SELECT cik, name, sic, sector, industry, n_in_scope_filings, last_filed FROM dim_company WHERE name ILIKE '%' || $1 || '%' OR CAST(cik AS VARCHAR) = $1 ORDER BY (name ILIKE $1 || '%') DESC, (CAST(cik AS VARCHAR) = $1) DESC, n_in_scope_filings DESC, length(name), name LIMIT 25 
+┌────────────────────────────────────────────────┐
+│┌──────────────────────────────────────────────┐│
+││              Total Time: 0.0039s             ││
+│└──────────────────────────────────────────────┘│
+└────────────────────────────────────────────────┘
+┌───────────────────────────┐
+│           QUERY           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│      EXPLAIN_ANALYZE      │
+│    ────────────────────   │
+│                           │
+│           0 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             #0            │
+│             #1            │
+│             #2            │
+│             #3            │
+│             #4            │
+│             #5            │
+│             #6            │
+│                           │
+│                           │
+│                           │
+│          22 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│__internal_decompress_integ│
+│    ral_bigint(#0, 1750)   │
+│             #1            │
+│__internal_decompress_integ│
+│    ral_integer(#2, 100)   │
+│             #3            │
+│             #4            │
+│__internal_decompress_integ│
+│     ral_bigint(#5, 0)     │
+│             #6            │
+│             #7            │
+│             #8            │
+│             #9            │
+│                           │
+│                           │
+│                           │
+│          22 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          ORDER_BY         │
+│    ────────────────────   │
+│          #7 DESC          │
+│          #8 DESC          │
+│ warehouse.main.dim_company│
+│  .n_in_scope_filings DESC │
+│           #9 ASC          │
+│ warehouse.main.dim_company│
+│        ."name" ASC        │
+│                           │
+│                           │
+│                           │
+│          22 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│__internal_compress_integra│
+│    l_uinteger(#0, 1750)   │
+│             #1            │
+│__internal_compress_integra│
+│    l_usmallint(#2, 100)   │
+│             #3            │
+│             #4            │
+│__internal_compress_integra│
+│     l_utinyint(#5, 0)     │
+│             #6            │
+│             #7            │
+│             #8            │
+│             #9            │
+│                           │
+│                           │
+│                           │
+│          22 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            cik            │
+│            name           │
+│            sic            │
+│           sector          │
+│          industry         │
+│     n_in_scope_filings    │
+│         last_filed        │
+│    (name ~~* 'micro%')    │
+│  (CAST(cik AS VARCHAR) =  │
+│          'micro')         │
+│        length(name)       │
+│                           │
+│                           │
+│                           │
+│          22 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         HASH_JOIN         │
+│    ────────────────────   │
+│      Join Type: SEMI      │
+│                           │
+│        Conditions:        │
+│       rowid = rowid       ├──────────────┐
+│                           │              │
+│                           │              │
+│                           │              │
+│          22 rows          │              │
+│           0.00s           │              │
+└─────────────┬─────────────┘              │
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│         TABLE_SCAN        ││           TOP_N           │
+│    ────────────────────   ││    ────────────────────   │
+│           Table:          ││          Top: 25          │
+│ warehouse.main.dim_company││                           │
+│                           ││         Order By:         │
+│   Type: Sequential Scan   ││          #2 DESC          │
+│                           ││          #3 DESC          │
+│        Projections:       ││ warehouse.main.dim_company│
+│            name           ││  .n_in_scope_filings DESC │
+│            cik            ││           #4 ASC          │
+│            sic            ││ warehouse.main.dim_company│
+│           sector          ││        ."name" ASC        │
+│          industry         ││                           │
+│     n_in_scope_filings    ││                           │
+│         last_filed        ││                           │
+│                           ││                           │
+│      Dynamic Filters:     ││           0.00s           │
+│  optional: rowid IN (574, ││                           │
+│   816, 2352, 3010, 3032,  ││                           │
+│   3454, 3501, 3814, 4112, ││                           │
+│   4368, 4906, 5309, 5353, ││                           │
+│   5386, 5396, 5884, 6192, ││                           │
+│   6305, 7303, 7307, 7482, ││                           │
+│  7701) AND optional: rowid││                           │
+│ >=574 AND optional: rowid<││                           │
+│ =7701 AND optional: rowid ││                           │
+│        IN BF(rowid)       ││                           │
+│                           ││                           │
+│                           ││                           │
+│                           ││                           │
+│          36 rows          ││          22 rows          │
+│           0.00s           ││          (0.00s)          │
+└───────────────────────────┘└─────────────┬─────────────┘
+                             ┌─────────────┴─────────────┐
+                             │         PROJECTION        │
+                             │    ────────────────────   │
+                             │            name           │
+                             │     n_in_scope_filings    │
+                             │    (name ~~* 'micro%')    │
+                             │  (CAST(cik AS VARCHAR) =  │
+                             │          'micro')         │
+                             │        length(name)       │
+                             │           rowid           │
+                             │                           │
+                             │                           │
+                             │                           │
+                             │          22 rows          │
+                             │           0.00s           │
+                             └─────────────┬─────────────┘
+                             ┌─────────────┴─────────────┐
+                             │           FILTER          │
+                             │    ────────────────────   │
+                             │ ((CAST(cik AS VARCHAR) =  │
+                             │  'micro') OR (name ~~* '  │
+                             │         %micro%'))        │
+                             │                           │
+                             │                           │
+                             │                           │
+                             │          22 rows          │
+                             │           0.00s           │
+                             └─────────────┬─────────────┘
+                             ┌─────────────┴─────────────┐
+                             │         TABLE_SCAN        │
+                             │    ────────────────────   │
+                             │           Table:          │
+                             │ warehouse.main.dim_company│
+                             │                           │
+                             │   Type: Sequential Scan   │
+                             │                           │
+                             │        Projections:       │
+                             │            name           │
+                             │            cik            │
+                             │     n_in_scope_filings    │
+                             │                           │
+                             │                           │
+                             │                           │
+                             │         7,917 rows        │
+                             │           0.00s           │
+                             └───────────────────────────┘

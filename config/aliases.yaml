@@ -1,0 +1,316 @@
+# Canonical metric -> ordered list of XBRL tags (first match wins, per company-period).
+#
+# Rules applied by the warehouse (see warehouse/sql/060_fact_normalized.sql):
+#   * only consolidated facts (no segments, no co-registrant) and no custom tags (version == adsh)
+#   * the tag's datatype must match the metric's datatype (via tag.txt), and for monetary metrics the
+#     unit must be the filing's dominant currency
+#   * among filings reporting the same (company, period, metric) the latest filed wins (amendment wins ties)
+#   * `derivations` fill a metric only when no listed tag is present; they are marked status = derived
+#
+# Tag names are us-gaap unless prefixed. Notes explain why the alias exists.
+metrics:
+  revenue:
+    datatype: monetary
+    statement: IS
+    description: Total revenue (net sales).
+    tags:
+      - Revenues
+      - RevenueFromContractWithCustomerExcludingAssessedTax
+      - RevenueFromContractWithCustomerIncludingAssessedTax
+      - SalesRevenueNet                      # deprecated after ASC 606 but still filed by some
+      - SalesRevenueGoodsNet
+      - RevenuesNetOfInterestExpense         # banks
+      - RegulatedAndUnregulatedOperatingRevenue  # utilities
+      - InterestAndDividendIncomeOperating   # banks without a total-revenue tag
+      - GrossInvestmentIncomeOperating       # BDCs / investment companies
+    notes: ASC 606 filers moved from Revenues/SalesRevenueNet to RevenueFromContractWithCustomer*; many still tag the total as Revenues.
+
+  cost_of_revenue:
+    datatype: monetary
+    statement: IS
+    description: Cost of revenue / cost of goods and services sold.
+    tags:
+      - CostOfRevenue
+      - CostOfGoodsAndServicesSold
+      - CostOfGoodsAndServiceExcludingDepreciationDepletionAndAmortization
+      - CostOfGoodsSold
+      - CostOfServices
+      - CostOfGoodsSoldExcludingDepreciationDepletionAndAmortization
+
+  gross_profit:
+    datatype: monetary
+    statement: IS
+    description: Gross profit.
+    tags:
+      - GrossProfit
+
+  operating_income:
+    datatype: monetary
+    statement: IS
+    description: Operating income (loss).
+    tags:
+      - OperatingIncomeLoss
+
+  net_income:
+    datatype: monetary
+    statement: IS
+    description: Net income (loss) attributable to the parent.
+    tags:
+      - NetIncomeLoss
+      - ProfitLoss                            # includes non-controlling interest
+      - NetIncomeLossAvailableToCommonStockholdersBasic
+      - IncomeLossFromContinuingOperations
+
+  total_assets:
+    datatype: monetary
+    statement: BS
+    description: Total assets.
+    tags:
+      - Assets
+
+  current_assets:
+    datatype: monetary
+    statement: BS
+    description: Total current assets (absent for unclassified balance sheets, e.g. banks).
+    tags:
+      - AssetsCurrent
+
+  current_liabilities:
+    datatype: monetary
+    statement: BS
+    description: Total current liabilities.
+    tags:
+      - LiabilitiesCurrent
+
+  total_liabilities:
+    datatype: monetary
+    statement: BS
+    description: Total liabilities. Roughly a third of filers omit the tag; see derivations.
+    tags:
+      - Liabilities
+
+  liabilities_and_equity:
+    datatype: monetary
+    statement: BS
+    description: Total liabilities and stockholders' equity (balances to total assets).
+    tags:
+      - LiabilitiesAndStockholdersEquity
+
+  equity_parent:
+    datatype: monetary
+    statement: BS
+    description: Stockholders' equity attributable to the parent.
+    tags:
+      - StockholdersEquity
+      - PartnersCapital
+      - MembersEquity
+      - CommonStockholdersEquity
+
+  equity_incl_nci:
+    datatype: monetary
+    statement: BS
+    description: Total equity including non-controlling interest.
+    tags:
+      - StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest
+      - PartnersCapitalIncludingPortionAttributableToNoncontrollingInterest
+
+  minority_interest:
+    datatype: monetary
+    statement: BS
+    description: Non-controlling interest in equity.
+    tags:
+      - MinorityInterest
+
+  temporary_equity:
+    datatype: monetary
+    statement: BS
+    description: Mezzanine / temporary equity (redeemable preferred etc.).
+    tags:
+      - TemporaryEquityCarryingAmountAttributableToParent
+      - TemporaryEquityCarryingAmountIncludingPortionAttributableToNoncontrollingInterest
+      - RedeemableNoncontrollingInterestEquityCarryingAmount
+
+  cash:
+    datatype: monetary
+    statement: BS
+    description: Cash and cash equivalents (incl. restricted cash variant used on cash-flow statements).
+    tags:
+      - CashAndCashEquivalentsAtCarryingValue
+      - CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents
+      - Cash
+      - CashAndDueFromBanks
+
+  short_term_investments:
+    datatype: monetary
+    statement: BS
+    description: Short-term / marketable investments held as current assets.
+    tags:
+      - ShortTermInvestments
+      - MarketableSecuritiesCurrent
+      - AvailableForSaleSecuritiesDebtSecuritiesCurrent
+      - CashCashEquivalentsAndShortTermInvestments   # combined; only used when nothing else exists
+
+  receivables:
+    datatype: monetary
+    statement: BS
+    description: Trade receivables, net, current.
+    tags:
+      - AccountsReceivableNetCurrent
+      - ReceivablesNetCurrent
+      - AccountsNotesAndLoansReceivableNetCurrent
+
+  inventory:
+    datatype: monetary
+    statement: BS
+    description: Inventory, net.
+    tags:
+      - InventoryNet
+      - InventoryFinishedGoodsNetOfReserves
+
+  ltd_current:
+    datatype: monetary
+    statement: BS
+    description: Current portion of long-term debt.
+    tags:
+      - LongTermDebtCurrent
+      - LongTermDebtAndCapitalLeaseObligationsCurrent
+      - LongTermDebtAndFinanceLeaseObligationsCurrent   # hypothetical newer variant; harmless if unused
+
+  ltd_noncurrent:
+    datatype: monetary
+    statement: BS
+    description: Long-term debt, non-current.
+    tags:
+      - LongTermDebtNoncurrent
+      - LongTermDebtAndCapitalLeaseObligations
+      - LongTermDebtAndFinanceLeaseObligationsNoncurrent   # hypothetical newer variant; harmless if unused
+      - LongTermDebt                           # total LTD when split is not reported; may include current portion
+
+  short_term_borrowings:
+    datatype: monetary
+    statement: BS
+    description: Short-term borrowings / commercial paper. DebtCurrent is deliberately excluded (it already contains ltd_current).
+    tags:
+      - ShortTermBorrowings
+      - CommercialPaper
+      - LinesOfCreditCurrent
+      - NotesPayableCurrent
+
+  operating_cash_flow:
+    datatype: monetary
+    statement: CF
+    description: Net cash from operating activities.
+    tags:
+      - NetCashProvidedByUsedInOperatingActivities
+      - NetCashProvidedByUsedInOperatingActivitiesContinuingOperations
+
+  investing_cash_flow:
+    datatype: monetary
+    statement: CF
+    description: Net cash from investing activities.
+    tags:
+      - NetCashProvidedByUsedInInvestingActivities
+      - NetCashProvidedByUsedInInvestingActivitiesContinuingOperations
+
+  financing_cash_flow:
+    datatype: monetary
+    statement: CF
+    description: Net cash from financing activities.
+    tags:
+      - NetCashProvidedByUsedInFinancingActivities
+      - NetCashProvidedByUsedInFinancingActivitiesContinuingOperations
+
+  capex:
+    datatype: monetary
+    statement: CF
+    description: Capital expenditure (positive number = cash outflow).
+    tags:
+      - PaymentsToAcquirePropertyPlantAndEquipment
+      - PaymentsToAcquireProductiveAssets
+      - PaymentsToAcquireOtherPropertyPlantAndEquipment
+      - PaymentsForCapitalImprovements
+
+  cash_change_incl_fx:
+    datatype: monetary
+    statement: CF
+    description: Period change in cash including FX effect.
+    tags:
+      - CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalentsPeriodIncreaseDecreaseIncludingExchangeRateEffect
+      - CashAndCashEquivalentsPeriodIncreaseDecrease
+
+  cash_change_excl_fx:
+    datatype: monetary
+    statement: CF
+    description: Period change in cash excluding FX effect.
+    tags:
+      - CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalentsPeriodIncreaseDecreaseExcludingExchangeRateEffect
+      - CashAndCashEquivalentsPeriodIncreaseDecreaseExcludingExchangeRateEffect
+
+  fx_effect:
+    datatype: monetary
+    statement: CF
+    description: Effect of exchange-rate changes on cash.
+    tags:
+      - EffectOfExchangeRateOnCashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents
+      - EffectOfExchangeRateOnCashAndCashEquivalents
+      - EffectOfExchangeRateOnCashCashEquivalentsRestrictedCashAndRestrictedCashEquivalentsIncludingDisposalGroupAndDiscontinuedOperations
+
+  shares_outstanding:
+    datatype: shares
+    statement: DEI
+    description: Common shares outstanding (cover page or balance sheet).
+    tags:
+      - dei:EntityCommonStockSharesOutstanding
+      - CommonStockSharesOutstanding
+
+  weighted_shares_basic:
+    datatype: shares
+    statement: IS
+    description: Weighted-average basic shares.
+    tags:
+      - WeightedAverageNumberOfSharesOutstandingBasic
+      - WeightedAverageNumberOfShareOutstandingBasicAndDiluted
+
+  weighted_shares_diluted:
+    datatype: shares
+    statement: IS
+    description: Weighted-average diluted shares.
+    tags:
+      - WeightedAverageNumberOfDilutedSharesOutstanding
+      - WeightedAverageNumberOfShareOutstandingBasicAndDiluted
+
+  eps_basic:
+    datatype: perShare
+    statement: IS
+    description: Basic earnings per share.
+    tags:
+      - EarningsPerShareBasic
+      - EarningsPerShareBasicAndDiluted
+
+  eps_diluted:
+    datatype: perShare
+    statement: IS
+    description: Diluted earnings per share.
+    tags:
+      - EarningsPerShareDiluted
+      - EarningsPerShareBasicAndDiluted
+
+# Derived metrics: applied only when the metric above has no reported value for that company-period.
+# terms: +metric / -metric; `optional` inputs default to 0 when missing (documented assumption).
+derivations:
+  - metric: equity_parent
+    formula: "+equity_incl_nci -minority_interest"
+    optional: [minority_interest]
+    reason: derived_equity_incl_nci_minus_minority_interest
+  - metric: gross_profit
+    formula: "+revenue -cost_of_revenue"
+    optional: []
+    reason: derived_revenue_minus_cost_of_revenue
+  - metric: equity_incl_nci
+    formula: "+equity_parent +minority_interest"
+    optional: [minority_interest]
+    reason: derived_equity_parent_plus_minority_interest
+  - metric: total_liabilities
+    formula: "+liabilities_and_equity -equity_incl_nci -temporary_equity"
+    optional: [temporary_equity]
+    reason: derived_from_liabilities_and_equity

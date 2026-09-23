@@ -1,0 +1,161 @@
+-- sector_percentile | COLD: EXPLAIN ANALYZE as the first statement of a fresh process + fresh read-only connection
+-- wall-clock of the EXPLAIN ANALYZE call as seen from Python: 663.9 ms
+-- params: ['Manufacturing']
+
+SELECT r.cik, c.name, c.industry, r.ratio, r.fiscal_year, r.period_end, r.value, r.source_adshs
+FROM fact_ratios r
+JOIN dim_company c USING (cik)
+WHERE c.sector = $1 AND r.basis = 'FY' AND r.value IS NOT NULL
+ORDER BY r.ratio, r.period_end
+
+
+┌─────────────────────────────────────┐
+│┌───────────────────────────────────┐│
+││    Query Profiling Information    ││
+│└───────────────────────────────────┘│
+└─────────────────────────────────────┘
+EXPLAIN ANALYZE  SELECT r.cik, c.name, c.industry, r.ratio, r.fiscal_year, r.period_end, r.value, r.source_adshs FROM fact_ratios r JOIN dim_company c USING (cik) WHERE c.sector = $1 AND r.basis = 'FY' AND r.value IS NOT NULL ORDER BY r.ratio, r.period_end 
+┌────────────────────────────────────────────────┐
+│┌──────────────────────────────────────────────┐│
+││              Total Time: 0.0287s             ││
+│└──────────────────────────────────────────────┘│
+└────────────────────────────────────────────────┘
+┌───────────────────────────┐
+│           QUERY           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│      EXPLAIN_ANALYZE      │
+│    ────────────────────   │
+│                           │
+│           0 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│__internal_decompress_integ│
+│    ral_bigint(#0, 1750)   │
+│             #1            │
+│             #2            │
+│             #3            │
+│__internal_decompress_integ│
+│   ral_integer(#4, 2017)   │
+│             #5            │
+│             #6            │
+│             #7            │
+│                           │
+│                           │
+│                           │
+│        70,912 rows        │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          ORDER_BY         │
+│    ────────────────────   │
+│        r.ratio ASC        │
+│      r.period_end ASC     │
+│                           │
+│                           │
+│                           │
+│        70,912 rows        │
+│           0.03s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│__internal_compress_integra│
+│    l_uinteger(#0, 1750)   │
+│             #1            │
+│             #2            │
+│             #3            │
+│__internal_compress_integra│
+│    l_utinyint(#4, 2017)   │
+│             #5            │
+│             #6            │
+│             #7            │
+│                           │
+│                           │
+│                           │
+│        70,912 rows        │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            cik            │
+│            name           │
+│          industry         │
+│           ratio           │
+│        fiscal_year        │
+│         period_end        │
+│           value           │
+│        source_adshs       │
+│                           │
+│                           │
+│                           │
+│        70,912 rows        │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         HASH_JOIN         │
+│    ────────────────────   │
+│      Join Type: INNER     │
+│   Conditions: cik = cik   │
+│                           ├──────────────┐
+│                           │              │
+│                           │              │
+│        70,912 rows        │              │
+│           0.00s           │              │
+└─────────────┬─────────────┘              │
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│         TABLE_SCAN        ││           FILTER          │
+│    ────────────────────   ││    ────────────────────   │
+│           Table:          ││      (cik <= 2115404)     │
+│ warehouse.main.fact_ratios││                           │
+│                           ││                           │
+│   Type: Sequential Scan   ││                           │
+│                           ││                           │
+│        Projections:       ││           0.00s           │
+│            cik            ││                           │
+│           value           ││                           │
+│           ratio           ││                           │
+│        fiscal_year        ││                           │
+│         period_end        ││                           │
+│        source_adshs       ││                           │
+│                           ││                           │
+│          Filters:         ││                           │
+│         basis='FY'        ││                           │
+│    (value IS NOT NULL)    ││                           │
+│                           ││                           │
+│      Dynamic Filters:     ││                           │
+│  optional: cik>=1750 AND  ││                           │
+│   optional: cik<=2114044  ││                           │
+│   AND optional: cik IN BF ││                           │
+│           (cik)           ││                           │
+│                           ││                           │
+│                           ││                           │
+│                           ││                           │
+│        72,095 rows        ││         2,716 rows        │
+│           0.08s           ││          (0.00s)          │
+└───────────────────────────┘└─────────────┬─────────────┘
+                             ┌─────────────┴─────────────┐
+                             │         TABLE_SCAN        │
+                             │    ────────────────────   │
+                             │           Table:          │
+                             │ warehouse.main.dim_company│
+                             │                           │
+                             │   Type: Sequential Scan   │
+                             │                           │
+                             │        Projections:       │
+                             │            cik            │
+                             │            name           │
+                             │          industry         │
+                             │                           │
+                             │          Filters:         │
+                             │   sector='Manufacturing'  │
+                             │                           │
+                             │                           │
+                             │                           │
+                             │         2,716 rows        │
+                             │           0.00s           │
+                             └───────────────────────────┘

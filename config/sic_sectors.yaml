@@ -1,0 +1,103 @@
+# Standard Industrial Classification -> sector (division) and industry (2-digit major group).
+# Source: SEC "Division of Corporation Finance: Standard Industrial Classification (SIC) Code List".
+divisions:
+  - {code: A, name: "Agriculture, Forestry & Fishing", from: 100, to: 999}
+  - {code: B, name: "Mining", from: 1000, to: 1499}
+  - {code: C, name: "Construction", from: 1500, to: 1799}
+  - {code: D, name: "Manufacturing", from: 2000, to: 3999}
+  - {code: E, name: "Transportation, Communications & Utilities", from: 4000, to: 4999}
+  - {code: F, name: "Wholesale Trade", from: 5000, to: 5199}
+  - {code: G, name: "Retail Trade", from: 5200, to: 5999}
+  - {code: H, name: "Finance, Insurance & Real Estate", from: 6000, to: 6799}
+  - {code: I, name: "Services", from: 7000, to: 8999}
+  - {code: J, name: "Public Administration", from: 9100, to: 9999}
+
+# Two-digit major groups (industry names).
+major_groups:
+  1: "Agricultural Production - Crops"
+  2: "Agricultural Production - Livestock"
+  7: "Agricultural Services"
+  8: "Forestry"
+  9: "Fishing, Hunting & Trapping"
+  10: "Metal Mining"
+  12: "Coal Mining"
+  13: "Oil & Gas Extraction"
+  14: "Nonmetallic Minerals, Except Fuels"
+  15: "General Building Contractors"
+  16: "Heavy Construction, Except Building"
+  17: "Special Trade Contractors"
+  20: "Food & Kindred Products"
+  21: "Tobacco Products"
+  22: "Textile Mill Products"
+  23: "Apparel & Other Textile Products"
+  24: "Lumber & Wood Products"
+  25: "Furniture & Fixtures"
+  26: "Paper & Allied Products"
+  27: "Printing & Publishing"
+  28: "Chemicals & Allied Products"
+  29: "Petroleum & Coal Products"
+  30: "Rubber & Miscellaneous Plastics Products"
+  31: "Leather & Leather Products"
+  32: "Stone, Clay & Glass Products"
+  33: "Primary Metal Industries"
+  34: "Fabricated Metal Products"
+  35: "Industrial Machinery & Equipment"
+  36: "Electronic & Other Electric Equipment"
+  37: "Transportation Equipment"
+  38: "Instruments & Related Products"
+  39: "Miscellaneous Manufacturing Industries"
+  40: "Railroad Transportation"
+  41: "Local & Interurban Passenger Transit"
+  42: "Trucking & Warehousing"
+  43: "U.S. Postal Service"
+  44: "Water Transportation"
+  45: "Transportation by Air"
+  46: "Pipelines, Except Natural Gas"
+  47: "Transportation Services"
+  48: "Communications"
+  49: "Electric, Gas & Sanitary Services"
+  50: "Wholesale Trade - Durable Goods"
+  51: "Wholesale Trade - Nondurable Goods"
+  52: "Building Materials & Garden Supplies"
+  53: "General Merchandise Stores"
+  54: "Food Stores"
+  55: "Automotive Dealers & Service Stations"
+  56: "Apparel & Accessory Stores"
+  57: "Furniture & Home Furnishings Stores"
+  58: "Eating & Drinking Places"
+  59: "Miscellaneous Retail"
+  60: "Depository Institutions"
+  61: "Nondepository Institutions"
+  62: "Security & Commodity Brokers"
+  63: "Insurance Carriers"
+  64: "Insurance Agents, Brokers & Service"
+  65: "Real Estate"
+  67: "Holding & Other Investment Offices"
+  70: "Hotels & Other Lodging Places"
+  72: "Personal Services"
+  73: "Business Services"
+  75: "Auto Repair, Services & Parking"
+  76: "Miscellaneous Repair Services"
+  78: "Motion Pictures"
+  79: "Amusement & Recreation Services"
+  80: "Health Services"
+  81: "Legal Services"
+  82: "Educational Services"
+  83: "Social Services"
+  84: "Museums, Botanical, Zoological Gardens"
+  86: "Membership Organizations"
+  87: "Engineering & Management Services"
+  88: "Private Households"
+  89: "Services, Not Elsewhere Classified"
+  91: "Executive, Legislative & General"
+  92: "Justice, Public Order & Safety"
+  93: "Finance, Taxation & Monetary Policy"
+  94: "Administration of Human Resources"
+  95: "Environmental Quality & Housing"
+  96: "Administration of Economic Programs"
+  97: "National Security & International Affairs"
+  99: "Nonclassifiable Establishments"
+
+# SIC ranges whose revenue concept differs (banks, insurers, REITs): revenue is not mandatory for them.
+financial_sic_ranges:
+  - [6000, 6799]

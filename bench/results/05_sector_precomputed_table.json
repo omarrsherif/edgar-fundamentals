@@ -1,0 +1,56 @@
+{
+  "queries": {
+    "company_search": {
+      "cold_p50_ms": 3.530850008246489,
+      "cold_p95_ms": 3.957580008136574,
+      "warm_p50_ms": 4.492050007684156,
+      "warm_p95_ms": 8.555855002487077,
+      "cold_n": 20,
+      "warm_n": 50
+    },
+    "company_ratio_trend": {
+      "cold_p50_ms": 8.805449993815273,
+      "cold_p95_ms": 9.728304985037543,
+      "warm_p50_ms": 5.766999995103106,
+      "warm_p95_ms": 7.684060018800664,
+      "cold_n": 20,
+      "warm_n": 50
+    },
+    "multi_company_compare": {
+      "cold_p50_ms": 7.087699996191077,
+      "cold_p95_ms": 7.757274992763999,
+      "warm_p50_ms": 8.640950007247739,
+      "warm_p95_ms": 10.810650004714262,
+      "cold_n": 20,
+      "warm_n": 50
+    },
+    "sector_percentile": {
+      "cold_p50_ms": 27.659599989419803,
+      "cold_p95_ms": 29.68776999769034,
+      "warm_p50_ms": 41.72064999875147,
+      "warm_p95_ms": 46.390935000090394,
+      "cold_n": 20,
+      "warm_n": 50
+    },
+    "dq_summary": {
+      "cold_p50_ms": 2.963550010463223,
+      "cold_p95_ms": 3.173315005551558,
+      "warm_p50_ms": 2.8148499986855313,
+      "warm_p95_ms": 3.1455149815883487,
+      "cold_n": 20,
+      "warm_n": 50
+    }
+  },
+  "connect_p50_ms": 600.8466500061331,
+  "process_wall_p50_ms": 987.1923000027891,
+  "dashboard": {
+    "cold_ms": 2367.4621999962255,
+    "warm_ms": 1592.9266999883112,
+    "exception": []
+  },
+  "definitions": {
+    "cold": "fresh Python process + fresh read-only DuckDB connection per run; OS page cache not dropped",
+    "warm": "same connection, 50 timed runs after 5 warm-ups",
+    "dashboard": "streamlit.testing.v1.AppTest full script execution (server side, no browser render); cold = first run in a fresh process, warm = second run in the same process"
+  }
+}

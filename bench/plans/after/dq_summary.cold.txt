@@ -1,0 +1,195 @@
+-- dq_summary | COLD: EXPLAIN ANALYZE as the first statement of a fresh process + fresh read-only connection
+-- wall-clock of the EXPLAIN ANALYZE call as seen from Python: 5.9 ms
+-- params: []
+
+SELECT s.*,
+       (SELECT count(*) FROM restatements WHERE classification = 'restatement' AND is_authoritative) AS restatement_groups
+FROM dq_summary s
+ORDER BY s.rule_id
+
+
+┌─────────────────────────────────────┐
+│┌───────────────────────────────────┐│
+││    Query Profiling Information    ││
+│└───────────────────────────────────┘│
+└─────────────────────────────────────┘
+EXPLAIN ANALYZE  SELECT s.*,        (SELECT count(*) FROM restatements WHERE classification = 'restatement' AND is_authoritative) AS restatement_groups FROM dq_summary s ORDER BY s.rule_id 
+┌────────────────────────────────────────────────┐
+│┌──────────────────────────────────────────────┐│
+││              Total Time: 0.0054s             ││
+│└──────────────────────────────────────────────┘│
+└────────────────────────────────────────────────┘
+┌───────────────────────────┐
+│           QUERY           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│      EXPLAIN_ANALYZE      │
+│    ────────────────────   │
+│                           │
+│           0 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│__internal_decompress_strin│
+│           g(#0)           │
+│             #1            │
+│__internal_decompress_strin│
+│           g(#2)           │
+│__internal_decompress_strin│
+│           g(#3)           │
+│             #4            │
+│             #5            │
+│__internal_decompress_integ│
+│   ral_bigint(#6, 38999)   │
+│__internal_decompress_integ│
+│    ral_bigint(#7, 2224)   │
+│__internal_decompress_integ│
+│    ral_bigint(#8, 2069)   │
+│__internal_decompress_integ│
+│     ral_bigint(#9, 0)     │
+│__internal_decompress_integ│
+│     ral_bigint(#10, 0)    │
+│            #11            │
+│            #12            │
+│            #13            │
+│            #14            │
+│            #15            │
+│                           │
+│                           │
+│                           │
+│          22 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          ORDER_BY         │
+│    ────────────────────   │
+│       s.rule_id ASC       │
+│                           │
+│                           │
+│                           │
+│          22 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│__internal_compress_string_│
+│        uinteger(#0)       │
+│             #1            │
+│__internal_compress_string_│
+│        uhugeint(#2)       │
+│__internal_compress_string_│
+│        ubigint(#3)        │
+│             #4            │
+│             #5            │
+│__internal_compress_integra│
+│   l_uinteger(#6, 38999)   │
+│__internal_compress_integra│
+│    l_uinteger(#7, 2224)   │
+│__internal_compress_integra│
+│    l_uinteger(#8, 2069)   │
+│__internal_compress_integra│
+│     l_uinteger(#9, 0)     │
+│__internal_compress_integra│
+│     l_uinteger(#10, 0)    │
+│            #11            │
+│            #12            │
+│            #13            │
+│            #14            │
+│            #15            │
+│                           │
+│                           │
+│                           │
+│          22 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│       CROSS_PRODUCT       │
+│    ────────────────────   │
+│                           ├──────────────┐
+│          22 rows          │              │
+│           0.00s           │              │
+└─────────────┬─────────────┘              │
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│         TABLE_SCAN        ││         PROJECTION        │
+│    ────────────────────   ││    ────────────────────   │
+│           Table:          ││ CASE  WHEN ((#1 > 1)) THEN│
+│ warehouse.main.dq_summary ││   ("error"('More than one │
+│                           ││      row returned by a    │
+│   Type: Sequential Scan   ││     subquery used as an   │
+│                           ││     expression - scalar   │
+│        Projections:       ││     subqueries can only   │
+│          rule_id          ││    return a single row.   │
+│         rule_name         ││          Use "SET         │
+│          category         ││ scalar_subquery_error_on_m│
+│          severity         ││   ultiple_rows=false" to  │
+│            unit           ││     revert to previous    │
+│        description        ││   behavior of returning a │
+│         candidates        ││ random row.')) ELSE #0 END│
+│         evaluated         ││                           │
+│           passed          ││                           │
+│           failed          ││                           │
+│          skipped          ││                           │
+│        failure_rate       ││           0.00s           │
+│          coverage         ││                           │
+│          seconds          ││                           │
+│           run_at          ││                           │
+│                           ││                           │
+│                           ││                           │
+│                           ││                           │
+│          22 rows          ││           1 row           │
+│           0.00s           ││          (0.00s)          │
+└───────────────────────────┘└─────────────┬─────────────┘
+                             ┌─────────────┴─────────────┐
+                             │    UNGROUPED_AGGREGATE    │
+                             │    ────────────────────   │
+                             │        Aggregates:        │
+                             │        "first"(#0)        │
+                             │        count_star()       │
+                             │                           │
+                             │                           │
+                             │                           │
+                             │           1 row           │
+                             │           0.00s           │
+                             └─────────────┬─────────────┘
+                             ┌─────────────┴─────────────┐
+                             │         PROJECTION        │
+                             │    ────────────────────   │
+                             │             #0            │
+                             │                           │
+                             │                           │
+                             │                           │
+                             │           1 row           │
+                             │           0.00s           │
+                             └─────────────┬─────────────┘
+                             ┌─────────────┴─────────────┐
+                             │    UNGROUPED_AGGREGATE    │
+                             │    ────────────────────   │
+                             │        Aggregates:        │
+                             │        count_star()       │
+                             │                           │
+                             │                           │
+                             │                           │
+                             │           1 row           │
+                             │           0.00s           │
+                             └─────────────┬─────────────┘
+                             ┌─────────────┴─────────────┐
+                             │         TABLE_SCAN        │
+                             │    ────────────────────   │
+                             │           Table:          │
+                             │warehouse.main.restatements│
+                             │                           │
+                             │   Type: Sequential Scan   │
+                             │                           │
+                             │          Filters:         │
+                             │      classification=      │
+                             │       'restatement'       │
+                             │      is_authoritative     │
+                             │                           │
+                             │                           │
+                             │                           │
+                             │        94,141 rows        │
+                             │           0.00s           │
+                             └───────────────────────────┘

@@ -1,0 +1,89 @@
+-- sector_percentile | COLD: EXPLAIN ANALYZE as the first statement of a fresh process + fresh read-only connection
+-- wall-clock of the EXPLAIN ANALYZE call as seen from Python: 5.7 ms
+-- params: ['Manufacturing']
+
+SELECT s.cik, c.name, s.ratio, s.fiscal_year, s.period_end, s.value, s.n_companies, s.pct_rank
+FROM sector_ratio_latest s
+JOIN dim_company c USING (cik)
+WHERE s.sector = $1
+
+
+┌─────────────────────────────────────┐
+│┌───────────────────────────────────┐│
+││    Query Profiling Information    ││
+│└───────────────────────────────────┘│
+└─────────────────────────────────────┘
+EXPLAIN ANALYZE  SELECT s.cik, c.name, s.ratio, s.fiscal_year, s.period_end, s.value, s.n_companies, s.pct_rank FROM sector_ratio_latest s JOIN dim_company c USING (cik) WHERE s.sector = $1 
+┌────────────────────────────────────────────────┐
+│┌──────────────────────────────────────────────┐│
+││              Total Time: 0.0052s             ││
+│└──────────────────────────────────────────────┘│
+└────────────────────────────────────────────────┘
+┌───────────────────────────┐
+│           QUERY           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│      EXPLAIN_ANALYZE      │
+│    ────────────────────   │
+│                           │
+│           0 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            cik            │
+│            name           │
+│           ratio           │
+│        fiscal_year        │
+│         period_end        │
+│           value           │
+│        n_companies        │
+│          pct_rank         │
+│                           │
+│                           │
+│                           │
+│        23,776 rows        │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         HASH_JOIN         │
+│    ────────────────────   │
+│      Join Type: INNER     │
+│   Conditions: cik = cik   │
+│                           ├──────────────┐
+│                           │              │
+│                           │              │
+│        23,776 rows        │              │
+│           0.00s           │              │
+└─────────────┬─────────────┘              │
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│         TABLE_SCAN        ││         TABLE_SCAN        │
+│    ────────────────────   ││    ────────────────────   │
+│           Table:          ││           Table:          │
+│       warehouse.main      ││ warehouse.main.dim_company│
+│    .sector_ratio_latest   ││                           │
+│                           ││   Type: Sequential Scan   │
+│   Type: Sequential Scan   ││                           │
+│                           ││        Projections:       │
+│        Projections:       ││            cik            │
+│            cik            ││            name           │
+│           ratio           ││                           │
+│        fiscal_year        ││   Filters: cik<=2089661   │
+│         period_end        ││                           │
+│           value           ││                           │
+│        n_companies        ││                           │
+│          pct_rank         ││                           │
+│                           ││           0.00s           │
+│          Filters:         ││                           │
+│   sector='Manufacturing'  ││                           │
+│                           ││                           │
+│      Dynamic Filters:     ││                           │
+│  optional: cik>=1750 AND  ││                           │
+│   optional: cik<=2089661  ││                           │
+│                           ││                           │
+│                           ││                           │
+│                           ││                           │
+│        23,776 rows        ││         7,816 rows        │
+│           0.00s           ││          (0.00s)          │
+└───────────────────────────┘└───────────────────────────┘

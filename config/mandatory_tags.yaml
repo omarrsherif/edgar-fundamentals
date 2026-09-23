@@ -1,0 +1,28 @@
+# Canonical metrics (after alias resolution) that every primary financial filing must report.
+# A filing is a candidate for this check only if it has at least one consolidated balance-sheet fact
+# (Part-III-only 10-K/A amendments carry no financial statements and are excluded).
+forms:
+  annual:      # 10-K, 10-K/A, 10-KT
+    - total_assets
+    - liabilities_and_equity
+    - equity_parent
+    - net_income
+    - operating_cash_flow
+    - revenue
+  quarterly:   # 10-Q, 10-Q/A, 10-QT
+    - total_assets
+    - liabilities_and_equity
+    - equity_parent
+    - net_income
+    - revenue
+
+# Metrics not required for companies whose SIC falls in config/sic_sectors.yaml financial_sic_ranges.
+financial_exempt:
+  - revenue
+
+# Metrics required only when the same filing period reports one of the listed metrics.
+# Pre-revenue companies and investment companies legitimately report no revenue line, but a filing
+# that reports cost of revenue or gross profit must also report revenue.
+conditional:
+  revenue:
+    requires_any_of: [cost_of_revenue, gross_profit]

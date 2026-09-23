@@ -1,0 +1,122 @@
+-- company_ratio_trend | COLD: EXPLAIN ANALYZE as the first statement of a fresh process + fresh read-only connection
+-- wall-clock of the EXPLAIN ANALYZE call as seen from Python: 570.9 ms
+-- params: [320193]
+
+SELECT period_end, basis, fiscal_year, fiscal_quarter, ratio, value, status, reason, source_adshs, inputs_json, currency
+FROM fact_ratios
+WHERE cik = $1
+ORDER BY period_end, ratio
+
+
+┌─────────────────────────────────────┐
+│┌───────────────────────────────────┐│
+││    Query Profiling Information    ││
+│└───────────────────────────────────┘│
+└─────────────────────────────────────┘
+EXPLAIN ANALYZE  SELECT period_end, basis, fiscal_year, fiscal_quarter, ratio, value, status, reason, source_adshs, inputs_json, currency FROM fact_ratios WHERE cik = $1 ORDER BY period_end, ratio 
+┌────────────────────────────────────────────────┐
+│┌──────────────────────────────────────────────┐│
+││              Total Time: 0.0095s             ││
+│└──────────────────────────────────────────────┘│
+└────────────────────────────────────────────────┘
+┌───────────────────────────┐
+│           QUERY           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│      EXPLAIN_ANALYZE      │
+│    ────────────────────   │
+│                           │
+│           0 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             #0            │
+│__internal_decompress_strin│
+│           g(#1)           │
+│__internal_decompress_integ│
+│   ral_integer(#2, 2017)   │
+│__internal_decompress_integ│
+│     ral_integer(#3, 1)    │
+│             #4            │
+│             #5            │
+│__internal_decompress_strin│
+│           g(#6)           │
+│             #7            │
+│             #8            │
+│             #9            │
+│__internal_decompress_strin│
+│           g(#10)          │
+│                           │
+│                           │
+│                           │
+│          208 rows         │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          ORDER_BY         │
+│    ────────────────────   │
+│ warehouse.main.fact_ratios│
+│      .period_end ASC      │
+│ warehouse.main.fact_ratios│
+│         .ratio ASC        │
+│                           │
+│                           │
+│                           │
+│          208 rows         │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             #0            │
+│__internal_compress_string_│
+│        uinteger(#1)       │
+│__internal_compress_integra│
+│    l_utinyint(#2, 2017)   │
+│__internal_compress_integra│
+│     l_utinyint(#3, 1)     │
+│             #4            │
+│             #5            │
+│__internal_compress_string_│
+│        uhugeint(#6)       │
+│             #7            │
+│             #8            │
+│             #9            │
+│__internal_compress_string_│
+│       uinteger(#10)       │
+│                           │
+│                           │
+│                           │
+│          208 rows         │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         TABLE_SCAN        │
+│    ────────────────────   │
+│           Table:          │
+│ warehouse.main.fact_ratios│
+│                           │
+│   Type: Sequential Scan   │
+│                           │
+│        Projections:       │
+│         period_end        │
+│           basis           │
+│        fiscal_year        │
+│       fiscal_quarter      │
+│           ratio           │
+│           value           │
+│           status          │
+│           reason          │
+│        source_adshs       │
+│        inputs_json        │
+│          currency         │
+│                           │
+│    Filters: cik=320193    │
+│                           │
+│                           │
+│                           │
+│          208 rows         │
+│           0.04s           │
+└───────────────────────────┘
